@@ -1,1 +1,5 @@
 /datasets/*
+.venv
+.code
+.idea
+__pycache__/
