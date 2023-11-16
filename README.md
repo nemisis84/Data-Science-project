@@ -33,6 +33,10 @@ python -m venv .venv
 ```bash
 python -m pip install -r requirements.txt
 ```
+6. Install helpers as python module
+```bash
+pip install -e .
+```
 
 ### Unix (macOS)
 
