@@ -67,7 +67,7 @@ def transform_bools(df, keyword):
     return df
 
 def encode_health():
-    df = pd.read_csv('../datasets/class_pos_covid.csv')
+    df = pd.read_csv('../../datasets/class_pos_covid.csv')
 
     #Binaries
     yes_no: dict[str, int] = {"no": 0, "No": 0, "yes": 1, "Yes": 1}

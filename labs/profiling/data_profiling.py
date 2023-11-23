@@ -3,7 +3,7 @@ import numpy as np
 
 # Health domain – Pos covid
 
-df = pd.read_csv('../datasets/class_pos_covid.csv')
+df = pd.read_csv('../../datasets/class_pos_covid.csv')
 print("Classification pos covid")
 
 # Records x variables
@@ -23,7 +23,7 @@ print(f"Total Missing Values: {total_missing_values}")
 
 # Services domain - Credit score
 
-df = pd.read_csv('../datasets/class_credit_score.csv')
+df = pd.read_csv('../../datasets/class_credit_score.csv')
 print("\nClassification credit score")
 
 # Records x variables
