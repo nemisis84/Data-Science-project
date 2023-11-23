@@ -1,0 +1,131 @@
+import pandas as pd
+from helpers.dslabs_functions import get_variable_types
+import numpy as np
+from math import pi, sin, cos
+import re
+
+def expand_loans(row, all_loans):
+    loans = row['Type_of_Loan'].split(',')
+    return [1 if loan in loans else 0 for loan in all_loans]
+
+def clean_loan_type(loan_type):
+    return loan_type.strip().replace('and ', '')
+
+def handle_loans(df):
+    all_loans = set(clean_loan_type(loan) 
+            for loan_list in df['Type_of_Loan'].dropna() 
+            for loan in loan_list.split(','))
+
+    expanded_rows = []
+    for loan_list in df['Type_of_Loan']:
+        loans = loan_list.split(',') if pd.notna(loan_list) else []
+        cleaned_loans = [clean_loan_type(loan) for loan in loans]
+        row = [1 if loan in cleaned_loans else 0 for loan in all_loans]
+        expanded_rows.append(row)
+    expanded_df = pd.DataFrame(expanded_rows, columns=list(all_loans))
+    df = pd.concat([df.reset_index(drop=True), expanded_df.reset_index(drop=True)], axis=1)
+    return df
+
+def transform_bools(df, keyword):
+    for col in df.columns:
+        if col.startswith(keyword):
+            df[col] = df[col].astype(int)
+    return df
+
+def clean_and_convert(s):
+    if pd.isna(s) or s == "nan":
+        return np.nan
+    if int(s) < 0:
+        return np.nan
+
+    cleaned = re.sub(r'[^0-9.]+', '', s)  # Remove non-numeric characters
+    # Convert to integer if possible, otherwise float
+    return int(cleaned) if cleaned.isdigit() else float(cleaned)
+
+def handle_months(df):
+    month_encoding = {
+    "January": 0,
+    "February":pi/6,
+    "March":2*pi/6,
+    "April":3*pi/6,
+    "May":4*pi/6,
+    "June":5*pi/6,
+    "July":6*pi/6,
+    "August": 7*pi/6,
+    }
+
+
+    encoding = {
+        "Month": month_encoding,
+    }
+
+    df = df.replace(encoding)
+    df = encode_cyclic_variables(df, ["Month"])
+
+    return df
+
+
+def encode_cyclic_variables(df, vars):
+    for v in vars:
+        x_max: float | int = max(df[v])
+        df[v + "_sin"] = df[v].apply(lambda x: round(sin(2 * pi * x / x_max), 3))
+        df[v + "_cos"] = df[v].apply(lambda x: round(cos(2 * pi * x / x_max), 3))
+    return df
+
+def calulate_age(age_categories):
+    mean_ages = []
+    for value in age_categories:
+        split = value.split()
+        years, months = int(split[0]), int(split[3])
+        mean_ages.append((years+months/12))
+    return mean_ages
+
+
+def encode_services():
+    df = pd.read_csv('../datasets/class_credit_score.csv')
+    df.drop(columns=["ID", "Customer_ID", "SSN", "Name"], inplace=True)
+
+    df = handle_loans(df)
+
+    credit_mix_encoding = {"Good": 2, "Standard":1, "Bad": 0, "nan":np.nan}
+    payment_of_min_amount_encoding = {"No":0, "NM":1, "Yes":2, "nan":np.nan}
+    payment_behaviour_encoding = {'High_spent_Small_value_payments':5,
+        'Low_spent_Large_value_payments':0,
+        'Low_spent_Medium_value_payments':1,
+        'Low_spent_Small_value_payments':2,
+        'High_spent_Medium_value_payments':4, 
+        "nan":np.nan,
+        'High_spent_Large_value_payments':3}
+    credit_score_encoding = {"Good":1, "Poor":0}
+    age_value_counts = df["Credit_History_Age"].value_counts()
+    mean_ages = calulate_age(age_value_counts.index)
+    credit_history_age_encoding = {age_value_counts.index[i]:mean_ages[i] for i in range(len(mean_ages))}
+    credit_history_age_encoding["nan"] = np.nan
+
+
+    encoding = {}
+    encoding["CreditMix"] = credit_mix_encoding
+    encoding["Payment_of_Min_Amount"] = payment_of_min_amount_encoding
+    encoding["Payment_Behaviour"] = payment_behaviour_encoding
+    encoding["Credit_Score"] = credit_score_encoding
+    encoding["Credit_History_Age"] = credit_history_age_encoding
+
+    df = df.replace(encoding, inplace=False)
+
+    df = pd.get_dummies(df, columns=['Occupation'], dummy_na=False)
+    df = transform_bools(df, "Occupation")
+
+    df['Age'] = df['Age'].apply(clean_and_convert)
+
+    df = handle_months(df)
+    df.drop(columns=["Month", "Type_of_Loan"], inplace=True)
+
+
+    print(df)
+
+if __name__=="__main__":
+    encode_services()
+
+
+
+
