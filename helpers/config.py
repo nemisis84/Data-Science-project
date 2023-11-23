@@ -5,7 +5,7 @@ from cycler import cycler
 
 # _________________________________________ STYLE ____________________________________________________
 simplefilter("ignore")
-style.use('../helpers/dslabs.mplstyle')  # We assume the code is run from the labs folder, so we need to traverse to the helpers folder
+style.use('../../helpers/dslabs.mplstyle')  # We assume the code is run from the labs folder, so we need to traverse to the helpers folder
 
 HATCHES = ['.', '..', '...', 'o'] #['/', '+', 'X', '*'] #'oo', 'OO', '..'
 
