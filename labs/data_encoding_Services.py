@@ -35,13 +35,9 @@ def transform_bools(df, keyword):
 def clean_and_convert(s):
     if pd.isna(s) or s == "nan":
         return np.nan
-    cleaned = re.sub(r'[^0-9.]+', '', s)  # Remove non-numeric characters
-    # Convert to integer if possible, otherwise float
-    return int(cleaned) if cleaned.isdigit() else float(cleaned)
-
-def clean_and_convert(s):
-    if pd.isna(s) or s == "nan":
+    if int(s) < 0:
         return np.nan
+
     cleaned = re.sub(r'[^0-9.]+', '', s)  # Remove non-numeric characters
     # Convert to integer if possible, otherwise float
     return int(cleaned) if cleaned.isdigit() else float(cleaned)

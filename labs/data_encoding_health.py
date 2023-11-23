@@ -78,7 +78,7 @@ def encode_health():
     df = df.replace(encoding, inplace=False)
 
     #Symbolic
-    general_health_encoding = {'Very good':3, 'Excellent':4, 'Fair':1, 'Poor':0, 'Good':1, 'nan':np.nan}
+    general_health_encoding = {'Very good':3, 'Excellent':4, 'Fair':1, 'Poor':0, 'Good':2, 'nan':np.nan}
     last_checkup_time_encoding = {'Within past year (anytime less than 12 months ago)':0.5, 'nan':np.nan,
         'Within past 2 years (1 year but less than 2 years ago)':1.5,
         'Within past 5 years (2 years but less than 5 years ago)':3.5,
