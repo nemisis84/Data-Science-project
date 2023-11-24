@@ -89,7 +89,6 @@ def calulate_age(age_categories):
         mean_ages.append((years + months / 12))
     return mean_ages
 
-
 def encode_services():
     df = pd.read_csv('../../datasets/class_credit_score.csv')
     df.drop(columns=["ID", "Customer_ID", "SSN", "Name"], inplace=True)
@@ -106,6 +105,11 @@ def encode_services():
                                   "nan": np.nan,
                                   'High_spent_Large_value_payments': 3}
     credit_score_encoding = {"Good": 1, "Poor": 0}
+    occupation_encoding = {'Scientist':0, "nan": np.nan, 'Teacher':12, 'Engineer':1, 'Entrepreneur':8,
+       'Developer':3, 'Lawyer':7, 'Media_Manager':10, 'Doctor':4, 'Journalist':11,
+       'Manager':5, 'Accountant':6, 'Musician':14, 'Mechanic':9, 'Writer':13,
+       'Architect':2}
+    
     age_value_counts = df["Credit_History_Age"].value_counts()
     mean_ages = calulate_age(age_value_counts.index)
     credit_history_age_encoding = {age_value_counts.index[i]: mean_ages[i] for i in range(len(mean_ages))}
@@ -117,11 +121,8 @@ def encode_services():
     encoding["Payment_Behaviour"] = payment_behaviour_encoding
     encoding["Credit_Score"] = credit_score_encoding
     encoding["Credit_History_Age"] = credit_history_age_encoding
-
+    encoding["Occupation"] = occupation_encoding
     df = df.replace(encoding, inplace=False)
-
-    df = pd.get_dummies(df, columns=['Occupation'], dummy_na=False)
-    df = transform_bools(df, "Occupation")
 
     df['Age'] = df['Age'].apply(clean_and_convert)
 

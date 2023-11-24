@@ -47,14 +47,13 @@ def parse_location_file(file_path):
 
 def add_coordinates(df, mapping):
     # Extract latitude and longitude from the mapping
-    df['Latitude'] = df['State'].map(lambda x: mapping[x]['Latitude'] if x in mapping else None)
-    df['Longitude'] = df['State'].map(lambda x: mapping[x]['Longitude'] if x in mapping else None)
+    df['Latitude'] = df['State'].map(lambda x: mapping[x]['Latitude'] if x in mapping else np.nan)
+    df['Longitude'] = df['State'].map(lambda x: mapping[x]['Longitude'] if x in mapping else np.nan)
     return df
 
 
 def encode_symbolic(df, encoding):
-    df = pd.get_dummies(df, columns=['RaceEthnicityCategory'], dummy_na=False)
-    transform_bools(df, "RaceEthnicityCategory")
+    
     file_path = "../../datasets/State, LON, LAT.txt"
     state_encoding = parse_location_file(file_path)
     df = add_coordinates(df, state_encoding)
@@ -83,10 +82,10 @@ def encode_health():
 
     # Symbolic
     general_health_encoding = {'Very good': 3, 'Excellent': 4, 'Fair': 1, 'Poor': 0, 'Good': 2, 'nan': np.nan}
-    last_checkup_time_encoding = {'Within past year (anytime less than 12 months ago)': 0.5, 'nan': np.nan,
-                                  'Within past 2 years (1 year but less than 2 years ago)': 1.5,
-                                  'Within past 5 years (2 years but less than 5 years ago)': 3.5,
-                                  '5 or more years ago': 7}
+    last_checkup_time_encoding = {'Within past year (anytime less than 12 months ago)': 0, 'nan': np.nan,
+                                  'Within past 2 years (1 year but less than 2 years ago)': 1,
+                                  'Within past 5 years (2 years but less than 5 years ago)': 2,
+                                  '5 or more years ago': 3}
     removed_teeth_encoding = {"nan": np.nan, 'None of them': 0, '1 to 5': 2, '6 or more, but not all': 13, 'All': 32}
     had_diabetes_encoding = {'Yes': 2, 'No': 0, 'No, pre-diabetes or borderline diabetes': 1, "nan": np.nan,
                              'Yes, but only during pregnancy (female)': 1}
@@ -95,11 +94,13 @@ def encode_health():
     ECiggarette_usage_encoding = {'Not at all (right now)': 1,
                                   'Never used e-cigarettes in my entire life': 0, 'Use them every day': 3,
                                   'Use them some days': 2, "nan": np.nan}
-
-    age_category_value_counts = df["AgeCategory"].value_counts()
-    mean_ages = calulate_mean_age(age_category_value_counts.index)
-    age_category_encoding = {age_category_value_counts.index[i]: mean_ages[i] for i in range(len(mean_ages))}
-    age_category_encoding["nan"] = np.nan
+    age_category_encoding = {'Age 80 or older':13, 'Age 40 to 44':5, 'Age 75 to 79':12,
+                            'Age 70 to 74':11, 'Age 55 to 59':8, 'Age 65 to 69':10, 'Age 60 to 64':9,
+                            'Age 50 to 54':7, 'Age 45 to 49':6, 'Age 35 to 39':4, 'Age 30 to 34':3,
+                            'Age 25 to 29':2, 'Age 18 to 24':0, "nan": np.nan}
+    race_ethnicity_category_encoding = {'White only, Non-Hispanic':4, 'Black only, Non-Hispanic':2,
+       'Multiracial, Non-Hispanic':3, "nan": np.nan, 'Hispanic':0,
+       'Other race only, Non-Hispanic':5}
 
     tetanus_encoding = {answer: yes_no_mapping(answer) for answer in df['TetanusLast10Tdap'].unique()}
 
@@ -112,11 +113,13 @@ def encode_health():
     encoding["ECigaretteUsage"] = ECiggarette_usage_encoding
     encoding["AgeCategory"] = age_category_encoding
     encoding["TetanusLast10Tdap"] = tetanus_encoding
-
+    encoding["RaceEthnicityCategory"] = race_ethnicity_category_encoding
     df = encode_symbolic(df, encoding)
 
     df.to_csv("../../datasets/prepared/class_pos_covid_encoded_1.csv", index=False)
 
 
 if __name__ == "__main__":
+if __name__ == "__main__":
     encode_health()
+
