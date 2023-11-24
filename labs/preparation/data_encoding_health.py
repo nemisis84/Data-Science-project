@@ -1,7 +1,7 @@
-
-import pandas as pd
-from helpers.dslabs_functions import get_variable_types, encode_cyclic_variables, dummify
 import numpy as np
+import pandas as pd
+
+from helpers.dslabs_functions import get_variable_types
 
 
 def calulate_mean_age(age_categories):
@@ -10,10 +10,11 @@ def calulate_mean_age(age_categories):
         split = value.split()
         age1, age2 = int(split[1]), split[3]
         if age2.isdigit():
-            mean_ages.append((age1+int(age2))/2)
+            mean_ages.append((age1 + int(age2)) / 2)
         else:
-            mean_ages.append(85)
+            mean_ages.append(85)  # 85 is an approximation of the mean age, chosen arbitrarily
     return mean_ages
+
 
 def yes_no_mapping(answer):
     if pd.isna(answer):
@@ -43,22 +44,24 @@ def parse_location_file(file_path):
 
     return location_mapping
 
+
 def add_coordinates(df, mapping):
     # Extract latitude and longitude from the mapping
     df['Latitude'] = df['State'].map(lambda x: mapping[x]['Latitude'] if x in mapping else None)
     df['Longitude'] = df['State'].map(lambda x: mapping[x]['Longitude'] if x in mapping else None)
     return df
 
+
 def encode_symbolic(df, encoding):
-    
     df = pd.get_dummies(df, columns=['RaceEthnicityCategory'], dummy_na=False)
     transform_bools(df, "RaceEthnicityCategory")
-    file_path = "../datasets/State, LON, LAT.txt"
+    file_path = "../../datasets/State, LON, LAT.txt"
     state_encoding = parse_location_file(file_path)
     df = add_coordinates(df, state_encoding)
     df = df.drop(columns=["State"])
     df = df.replace(encoding, inplace=False)
     return df
+
 
 def transform_bools(df, keyword):
     for col in df.columns:
@@ -66,10 +69,11 @@ def transform_bools(df, keyword):
             df[col] = df[col].astype(int)
     return df
 
+
 def encode_health():
     df = pd.read_csv('../../datasets/class_pos_covid.csv')
 
-    #Binaries
+    # Binaries
     yes_no: dict[str, int] = {"no": 0, "No": 0, "yes": 1, "Yes": 1}
     sex_values: dict[str, int] = {"Female": 0, "Male": 1}
     variable_types = get_variable_types(df)
@@ -77,27 +81,27 @@ def encode_health():
     encoding["Sex"] = sex_values
     df = df.replace(encoding, inplace=False)
 
-    #Symbolic
-    general_health_encoding = {'Very good':3, 'Excellent':4, 'Fair':1, 'Poor':0, 'Good':2, 'nan':np.nan}
-    last_checkup_time_encoding = {'Within past year (anytime less than 12 months ago)':0.5, 'nan':np.nan,
-        'Within past 2 years (1 year but less than 2 years ago)':1.5,
-        'Within past 5 years (2 years but less than 5 years ago)':3.5,
-        '5 or more years ago':7}
-    removed_teeth_encoding = {"nan":np.nan, 'None of them':0, '1 to 5':2, '6 or more, but not all':13, 'All':32}
-    had_diabetes_encoding = {'Yes':2, 'No':0, 'No, pre-diabetes or borderline diabetes':1, "nan":np.nan, 'Yes, but only during pregnancy (female)':1}
-    smoker_status_encoding = {'Never smoked':0, 'Current smoker - now smokes some days':2,
-        'Former smoker':1, "nan":np.nan, 'Current smoker - now smokes every day':3}
-    ECiggarette_usage_encoding = {'Not at all (right now)':1,
-        'Never used e-cigarettes in my entire life':0, 'Use them every day':3,
-        'Use them some days':2, "nan":np.nan}
+    # Symbolic
+    general_health_encoding = {'Very good': 3, 'Excellent': 4, 'Fair': 1, 'Poor': 0, 'Good': 2, 'nan': np.nan}
+    last_checkup_time_encoding = {'Within past year (anytime less than 12 months ago)': 0.5, 'nan': np.nan,
+                                  'Within past 2 years (1 year but less than 2 years ago)': 1.5,
+                                  'Within past 5 years (2 years but less than 5 years ago)': 3.5,
+                                  '5 or more years ago': 7}
+    removed_teeth_encoding = {"nan": np.nan, 'None of them': 0, '1 to 5': 2, '6 or more, but not all': 13, 'All': 32}
+    had_diabetes_encoding = {'Yes': 2, 'No': 0, 'No, pre-diabetes or borderline diabetes': 1, "nan": np.nan,
+                             'Yes, but only during pregnancy (female)': 1}
+    smoker_status_encoding = {'Never smoked': 0, 'Current smoker - now smokes some days': 2,
+                              'Former smoker': 1, "nan": np.nan, 'Current smoker - now smokes every day': 3}
+    ECiggarette_usage_encoding = {'Not at all (right now)': 1,
+                                  'Never used e-cigarettes in my entire life': 0, 'Use them every day': 3,
+                                  'Use them some days': 2, "nan": np.nan}
 
     age_category_value_counts = df["AgeCategory"].value_counts()
     mean_ages = calulate_mean_age(age_category_value_counts.index)
-    age_category_encoding = {age_category_value_counts.index[i]:mean_ages[i] for i in range(len(mean_ages))}
+    age_category_encoding = {age_category_value_counts.index[i]: mean_ages[i] for i in range(len(mean_ages))}
     age_category_encoding["nan"] = np.nan
 
     tetanus_encoding = {answer: yes_no_mapping(answer) for answer in df['TetanusLast10Tdap'].unique()}
-
 
     encoding = {}
     encoding["GeneralHealth"] = general_health_encoding
@@ -110,7 +114,9 @@ def encode_health():
     encoding["TetanusLast10Tdap"] = tetanus_encoding
 
     df = encode_symbolic(df, encoding)
-    print(df)
 
-if __name__=="__main__":
+    df.to_csv("../../datasets/prepared/class_pos_covid_encoded_1.csv")
+
+
+if __name__ == "__main__":
     encode_health()
