@@ -1,8 +1,8 @@
-import pandas as pd
-from helpers.dslabs_functions import get_variable_types
-import numpy as np
-from math import pi, sin, cos
 import re
+from math import pi, sin, cos
+
+import numpy as np
+import pandas as pd
 
 
 def expand_loans(row, all_loans):
@@ -128,7 +128,7 @@ def encode_services():
     df = handle_months(df)
     df.drop(columns=["Month", "Type_of_Loan"], inplace=True)
 
-    print(df.head)
+    df.to_csv('../../datasets/prepared/class_credit_score_encoded_1.csv', index=False)
 
 
 if __name__ == "__main__":
