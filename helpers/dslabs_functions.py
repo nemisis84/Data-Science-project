@@ -290,12 +290,12 @@ def mvi_by_filling(data: DataFrame, strategy: str ='frequent') -> DataFrame:
         return the data modified
     '''
     df, tmp_nr, tmp_sb, tmp_bool = None, None, None, None
-    variables = get_variable_types(data)
 
-    stg_num, v_num = 'mean', -1
-    stg_sym, v_sym = 'most_frequent', 'NA'
-    stg_bool, v_bool = 'most_frequent', False
     if strategy != 'knn':
+        variables = get_variable_types(data)
+        stg_num, v_num = 'mean', -1
+        stg_sym, v_sym = 'most_frequent', 'NA'
+        stg_bool, v_bool = 'most_frequent', False
         if strategy == 'constant':
             stg_num, stg_sym, stg_bool = 'constant', 'constant', 'constant'
         if len(variables['numeric']) > 0:
