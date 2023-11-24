@@ -115,7 +115,7 @@ def encode_health():
 
     df = encode_symbolic(df, encoding)
 
-    df.to_csv("../../datasets/prepared/class_pos_covid_encoded_1.csv")
+    df.to_csv("../../datasets/prepared/class_pos_covid_encoded_1.csv", index=False)
 
 
 if __name__ == "__main__":
