@@ -91,7 +91,7 @@ def calulate_age(age_categories):
 
 def encode_services():
     df = pd.read_csv('../../datasets/class_credit_score.csv')
-    df.drop(columns=["ID", "Customer_ID", "SSN", "Name"], inplace=True)
+    df.drop(columns=["ID", "SSN", "Name"], inplace=True)
 
     df = handle_loans(df)
 
