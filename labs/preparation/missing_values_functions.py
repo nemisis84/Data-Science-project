@@ -7,7 +7,7 @@ from matplotlib.pyplot import show
 from helpers.dslabs_functions import mvi_by_dropping
 
 
-def check_differing_values(df, column):
+def check_differing_values(fin, column):
     # Group by 'Customer_ID' and get unique values in 'column'
     # nan is counted as a value
     unique_values = fin.groupby('Customer_ID')[column].unique()
@@ -45,8 +45,6 @@ def count_distribution_for_missing_values_per_customer(fin, column):
     count_distribution = counts.value_counts().sort_index()
 
     print(count_distribution)
-
-
 
 
 def impute_values(group, diff):
@@ -117,7 +115,7 @@ def render_mv(df):
 
     # sns.despine()
     plt.tight_layout()
-    plt.savefig('../../figures/temp/missing_values_per_variable.png')
+    # plt.savefig('../../figures/temp/missing_values_per_variable.png')
     show()
 
 
