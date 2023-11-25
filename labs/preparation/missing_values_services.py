@@ -26,13 +26,14 @@ def imputate_missing_values_services():
     impute_column(df, 'Payment_Behaviour', 'mode')
     impute_column(df, 'MonthlyBalance', 'mean', rounding=5)
 
-    df.to_csv('../../datasets/prepared/class_credit_score_2_1.csv', index=False)
-
-    # KNN imputation
     try:
         df.drop(columns=["Customer_ID"], inplace=True)
     except KeyError:
         pass
+    
+    df.to_csv('../../datasets/prepared/class_credit_score_2_1.csv', index=False)
+
+    # KNN imputation
     mvi_by_filling(df, 'knn').to_csv('../../datasets/prepared/class_credit_score_2_knn.csv', index=False)
 
 
