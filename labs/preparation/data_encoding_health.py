@@ -120,6 +120,5 @@ def encode_health():
 
 
 if __name__ == "__main__":
-if __name__ == "__main__":
     encode_health()
 
