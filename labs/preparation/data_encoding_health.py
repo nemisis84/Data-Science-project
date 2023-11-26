@@ -1,7 +1,7 @@
-
-import pandas as pd
-from helpers.dslabs_functions import get_variable_types, encode_cyclic_variables, dummify
 import numpy as np
+import pandas as pd
+
+from helpers.dslabs_functions import get_variable_types
 
 
 def calulate_mean_age(age_categories):
@@ -10,10 +10,11 @@ def calulate_mean_age(age_categories):
         split = value.split()
         age1, age2 = int(split[1]), split[3]
         if age2.isdigit():
-            mean_ages.append((age1+int(age2))/2)
+            mean_ages.append((age1 + int(age2)) / 2)
         else:
-            mean_ages.append(85)
+            mean_ages.append(85)  # 85 is an approximation of the mean age, chosen arbitrarily
     return mean_ages
+
 
 def yes_no_mapping(answer):
     if pd.isna(answer):
@@ -43,11 +44,13 @@ def parse_location_file(file_path):
 
     return location_mapping
 
+
 def add_coordinates(df, mapping):
     # Extract latitude and longitude from the mapping
     df['Latitude'] = df['State'].map(lambda x: mapping[x]['Latitude'] if x in mapping else np.nan)
     df['Longitude'] = df['State'].map(lambda x: mapping[x]['Longitude'] if x in mapping else np.nan)
     return df
+
 
 def encode_symbolic(df, encoding):
     
@@ -58,16 +61,18 @@ def encode_symbolic(df, encoding):
     df = df.replace(encoding, inplace=False)
     return df
 
+
 def transform_bools(df, keyword):
     for col in df.columns:
         if col.startswith(keyword):
             df[col] = df[col].astype(int)
     return df
 
+
 def encode_health():
     df = pd.read_csv('../../datasets/class_pos_covid.csv')
 
-    #Binaries
+    # Binaries
     yes_no: dict[str, int] = {"no": 0, "No": 0, "yes": 1, "Yes": 1}
     sex_values: dict[str, int] = {"Female": 0, "Male": 1}
     variable_types = get_variable_types(df)
@@ -99,7 +104,6 @@ def encode_health():
 
     tetanus_encoding = {answer: yes_no_mapping(answer) for answer in df['TetanusLast10Tdap'].unique()}
 
-
     encoding = {}
     encoding["GeneralHealth"] = general_health_encoding
     encoding["LastCheckupTime"] = last_checkup_time_encoding
@@ -112,7 +116,9 @@ def encode_health():
     encoding["RaceEthnicityCategory"] = race_ethnicity_category_encoding
     df = encode_symbolic(df, encoding)
 
-    df.to_csv("../../datasets/prepared/class_pos_covid_encoded_1.csv")
+    df.to_csv("../../datasets/prepared/class_pos_covid_encoded_1.csv", index=False)
+
 
 if __name__ == "__main__":
     encode_health()
+
