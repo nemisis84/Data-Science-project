@@ -134,3 +134,4 @@ def encode_services():
 
 if __name__ == "__main__":
     encode_services()
+    print("Hi")
