@@ -53,6 +53,8 @@ def imputate_health_custom(data, save=False):
     if save:
         df.to_csv('../../datasets/prepared/class_pos_covid_2_1.csv', index=False)
 
+    return df
+
 
 def impute_health_knn(data, save=False):
     df = init_impute(data)

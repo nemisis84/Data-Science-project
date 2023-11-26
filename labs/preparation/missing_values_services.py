@@ -5,17 +5,15 @@ from labs.preparation.missing_values_functions import impute_credithistory, impu
 
 
 def init_impute(data):
+    # Drops no variables and 400 records (0.4%)
     df = mvi_by_dropping(data, min_pct_per_variable=0.9, min_pct_per_record=0.85)
     df.reset_index(drop=True, inplace=True)
 
     return df
 
+
 def imputate_missing_values_services(data, save=False):
     df = init_impute(data)
-
-    # Drops no variables and 400 records (0.4%)
-    df = mvi_by_dropping(df, min_pct_per_variable=0.75, min_pct_per_record=0.9)
-    df.reset_index(drop=True, inplace=True)
 
     # Custom imputation
     impute_column_finance(df, 'Age', 'mode')
@@ -37,6 +35,8 @@ def imputate_missing_values_services(data, save=False):
 
     if save:
         df.to_csv('../../datasets/prepared/class_credit_score_2_1.csv', index=False)
+
+    return df
 
 
 def impute_credit_score_knn(data, save=False):
