@@ -4,13 +4,17 @@ from helpers.dslabs_functions import mvi_by_dropping, mvi_by_filling
 from labs.preparation.missing_values_functions import impute_credithistory, impute_column_finance
 
 
-def imputate_missing_values_services():
-    filename = '../../datasets/prepared/class_credit_score_encoded_1.csv'
-    df = pd.read_csv(filename, na_values="")
+def init_impute(data):
+    df = mvi_by_dropping(data, min_pct_per_variable=0.9, min_pct_per_record=0.85)
+    df.reset_index(drop=True, inplace=True)
 
-    # Drop 400 rows with missing values, then reset indices
-    # We should also test for dropping and not dropping records
-    df = mvi_by_dropping(df, min_pct_per_variable=0.0, min_pct_per_record=0.9)
+    return df
+
+def imputate_missing_values_services(data, save=False):
+    df = init_impute(data)
+
+    # Drops no variables and 400 records (0.4%)
+    df = mvi_by_dropping(df, min_pct_per_variable=0.75, min_pct_per_record=0.9)
     df.reset_index(drop=True, inplace=True)
 
     # Custom imputation
@@ -31,12 +35,20 @@ def imputate_missing_values_services():
     except KeyError:
         pass
 
-    df.to_csv('../../datasets/prepared/class_credit_score_2_1.csv', index=False)
+    if save:
+        df.to_csv('../../datasets/prepared/class_credit_score_2_1.csv', index=False)
 
-    # KNN imputation
-    df = pd.read_csv(filename, na_values="")
-    mvi_by_filling(df, 'knn').to_csv('../../datasets/prepared/class_credit_score_2_knn.csv', index=False)
+
+def impute_credit_score_knn(data, save=False):
+    df = init_impute(data)
+    df = mvi_by_filling(df, 'knn')
+    if save:
+        df.to_csv('../../datasets/prepared/class_credit_score_2_knn.csv', index=False)
+
+    return df
 
 
 if __name__ == "__main__":
-    imputate_missing_values_services()
+    fin = pd.read_csv('../../datasets/prepared/class_credit_score_encoded_1.csv', na_values="")
+    # imputate_missing_values_services(fin, save=True)
+    # impute_credit_score_knn(fin, save=True)

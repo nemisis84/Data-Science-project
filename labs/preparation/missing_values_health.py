@@ -1,12 +1,17 @@
 import pandas as pd
 
 from helpers.dslabs_functions import mvi_by_dropping, mvi_by_filling
-from labs.preparation.missing_values_functions import impute_credithistory, impute_column, render_mv
+from labs.preparation.missing_values_functions import impute_credithistory, impute_column
 
 
-def imputate_health():
-    filename = '../../datasets/prepared/class_pos_covid_encoded_1.csv'
-    df = pd.read_csv(filename, na_values="")
+def init_impute(data):
+    df = mvi_by_dropping(data, min_pct_per_variable=0.9, min_pct_per_record=0.85)
+    df.reset_index(drop=True, inplace=True)
+
+    return df
+
+def imputate_health_custom(data, save=False):
+    df = init_impute(data)
 
     impute_column(df, 'GeneralHealth', 'mode')
     impute_column(df, 'PhysicalHealthDays', 'median', rounding=0)  # mean falls outside the 75th percentile
@@ -44,13 +49,20 @@ def imputate_health():
     impute_column(df, 'TetanusLast10Tdap', 'mode')
     impute_column(df, 'HighRiskLastYear', 'mode')
 
-    # render_mv(df)
-    df.to_csv('../../datasets/prepared/class_pos_covid_2_1.csv', index=False)
+    if save:
+        df.to_csv('../../datasets/prepared/class_pos_covid_2_1.csv', index=False)
 
-    # KNN imputation
-    df = pd.read_csv(filename, na_values="")
-    mvi_by_filling(df, 'knn').to_csv('../../datasets/prepared/class_pos_covid_2_knn.csv', index=False)
+
+def impute_health_knn(data, save=False):
+    df = init_impute(data)
+    df = mvi_by_filling(df, 'knn')
+    if save:
+        df.to_csv('../../datasets/prepared/class_pos_covid_2_knn.csv', index=False)
+    return df
 
 
 if __name__ == "__main__":
-    imputate_health()
+    cov = pd.read_csv('../../datasets/prepared/class_pos_covid_encoded_1.csv', na_values="")
+    # imputate_health_custom(fin, save=True)
+    # impute_health_knn(fin,save=True)
+
