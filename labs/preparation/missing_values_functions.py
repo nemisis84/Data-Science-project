@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from matplotlib.pyplot import show
 
 from helpers.dslabs_functions import mvi_by_dropping
+from sklearn.impute import SimpleImputer, KNNImputer
 
 
 def check_differing_values(fin, column):
@@ -16,26 +17,6 @@ def check_differing_values(fin, column):
     selected_customer_ids = unique_values[unique_values.apply(lambda x: len(x) > 2)].index
 
     print(f"There are {selected_customer_ids.size} customers with differing values for {column}")
-
-
-fin = pd.read_csv("../../datasets/prepared/class_credit_score_encoded_1.csv")
-
-
-def mvi_amputation(fin):
-    # find missing values
-    mv = {}
-    for col in fin.columns:
-        num = fin[col].isna().sum()
-        if num > 0:
-            mv[col] = num
-
-    # print(mv)
-    print(fin.shape)
-
-    print(f"col\trow")
-    for i in range(101):
-        print({i / 100})
-        print(mvi_by_dropping(fin, min_pct_per_variable=0.0, min_pct_per_record=(i / 100)).shape[0])
 
 
 def count_distribution_for_missing_values_per_customer(fin, column):
@@ -57,7 +38,23 @@ def impute_credithistory(df):
     df['Credit_History_Age'] = df.groupby('Customer_ID').apply(impute_values, diff=diff).reset_index(level=0, drop=True)
 
 
-def impute_column(df, column_name, method='mean', rounding=0):
+def impute_column(df, column_name, strategy='mean', rounding=0):
+    if strategy == 'mean':
+        mean_imputer = SimpleImputer(strategy='mean')
+        df[column_name] = mean_imputer.fit_transform(df[[column_name]])
+        df[column_name] = round(df[column_name], rounding)
+    elif strategy == 'median':
+        median_imputer = SimpleImputer(strategy='median')
+        df[column_name] = median_imputer.fit_transform(df[[column_name]])
+        df[column_name] = round(df[column_name], rounding)
+    elif strategy == 'mode':
+        mode_imputer = SimpleImputer(strategy='most_frequent')
+        df[column_name] = mode_imputer.fit_transform(df[[column_name]])
+    else:
+        print("Invalid strategy specified")
+
+
+def impute_column_finance(df, column_name, method='mean', rounding=0):
     """
     Impute missing values in a column by either mean, mode or median. This groups together all rows with the same
     Customer_ID and uses that to impute the missing values.
@@ -119,8 +116,15 @@ def render_mv(df):
     show()
 
 
-# Reasonings for the imputation modes finances
-if __name__ == '__main__':
+def reasoning_services():
+    """
+    Finances dataset consists of a lot of records based on the same customer. This means that we can imputate missing
+    values by grouping together all rows with the same Customer_ID and then imputating the missing values based on that.
+    We therefore need to check how many missing values there are per customer, to see if we can actually get a good
+    estimate of the missing values.
+    """
+    fin = pd.read_csv("../../datasets/prepared/class_credit_score_encoded_1.csv")
+    # Should remove this line as it skews analysis (a bit)
     fin = mvi_by_dropping(fin, min_pct_per_variable=0.0, min_pct_per_record=0.9)  # Drops ~ 400 rows of 100k
 
     count_distribution_for_missing_values_per_customer(fin, "NumofDelayedPayment")
@@ -208,3 +212,7 @@ if __name__ == '__main__':
     4     10
     5      1
     '''
+
+
+if __name__ == "__main__":
+    reasoning_services()
