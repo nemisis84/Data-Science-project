@@ -5,6 +5,7 @@ from labs.preparation.missing_values_functions import impute_credithistory, impu
 
 
 def init_impute(data):
+    # Drops no variables, but drops 0.2% of the records (1117)
     df = mvi_by_dropping(data, min_pct_per_variable=0.9, min_pct_per_record=0.85)
     df.reset_index(drop=True, inplace=True)
 
