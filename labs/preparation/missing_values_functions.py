@@ -79,43 +79,6 @@ def impute_column_finance(df, column_name, method='mean', rounding=0):
         print("Invalid method specified")
 
 
-def render_mv(df):
-    print(f"Dataset nr records={df.shape[0]}", f"nr variables={df.shape[1]}")
-
-    mv: dict[str, int] = {}
-    for var in df.columns:
-        nr: int = df[var].isna().sum()
-        if "Loan" not in var and "Not Specified" not in var and "cos" not in var and "sin" not in var:
-            mv[var] = nr
-
-    print(f"Missing values: {mv}")
-    for i in mv:
-        print(f"{i}\t{mv[i]}")
-
-    variables = list(mv.keys())
-    missing_values = list(mv.values())
-    sns.set_style("whitegrid")
-    sns.set_context("talk")
-    plt.figure(figsize=(20, 8))
-    bars = sns.barplot(x=variables, y=missing_values)
-    plt.xticks(rotation=45, ha='right')
-
-    plt.title('Number of Missing Values per Variable', fontsize=24)
-    plt.ylabel('Number of Missing Values', fontsize=18)
-
-    for bar in bars.patches:
-        bars.annotate(format(bar.get_height(), ',.0f'),  # No decimal places, include commas as thousands separators.
-                      (bar.get_x() + bar.get_width() / 2, bar.get_height()),
-                      ha='center', va='center',
-                      size=13, xytext=(0, 8),
-                      textcoords='offset points')
-
-    # sns.despine()
-    plt.tight_layout()
-    # plt.savefig('../../figures/temp/missing_values_per_variable.png')
-    show()
-
-
 def reasoning_services():
     """
     Finances dataset consists of a lot of records based on the same customer. This means that we can imputate missing
