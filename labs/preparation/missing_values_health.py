@@ -5,11 +5,13 @@ from labs.preparation.missing_values_functions import impute_credithistory, impu
 
 
 def init_impute(data):
-    # Drops no variables, but drops 0.2% of the records (1117)
+    # Drops no variables, but drops 0.3% of the records (1 286)
     df = mvi_by_dropping(data, min_pct_per_variable=0.9, min_pct_per_record=0.85)
     df.reset_index(drop=True, inplace=True)
+    print(df.shape)
 
     return df
+
 
 def imputate_health_custom(data, save=False):
     df = init_impute(data)
@@ -41,6 +43,7 @@ def imputate_health_custom(data, save=False):
     impute_column(df, 'ECigaretteUsage', 'mode')
     impute_column(df, 'ChestScan', 'mode')
     impute_column(df, 'AgeCategory', 'mode')
+    impute_column(df, 'RaceEthnicityCategory', 'mode')
     impute_column(df, 'HeightInMeters', 'mean', rounding=2)
     impute_column(df, 'WeightInKilograms', 'mean', rounding=2)
     impute_column(df, 'BMI', 'median', rounding=2)
