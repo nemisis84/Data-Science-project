@@ -16,7 +16,7 @@ def truncate_outliers(data: DataFrame, save=False, file_prefix=""):
             lambda x: top if x > top else bottom if x < bottom else x
         )
     if save:
-        df.to_csv(f"../../datasets/prepared/{file_prefix}_3_truncated.csv", index=True)
+        df.to_csv(f"../../datasets/prepared/{file_prefix}_3_truncated.csv", index=False)
     print("Data after truncating outliers:", df.shape)
     print(df.describe())
     return df
