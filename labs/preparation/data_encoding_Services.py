@@ -142,7 +142,7 @@ def encode_services():
     df = handle_months(df)
     df.drop(columns=["Month", "Type_of_Loan"], inplace=True)
 
-    df = remove_negatives(df, exclude_cols=["Customer_ID", "Month_cos", "Month_sin"])
+    df = remove_negatives(df, exclude_cols=["Customer_ID", "Month_cos", "Month_sin", "ChangedCreditLimit", "Delay_from_due_date"])
 
     df.to_csv('../../datasets/prepared/class_credit_score_encoded_1.csv', index=False)
 
