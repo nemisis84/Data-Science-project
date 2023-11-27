@@ -47,6 +47,8 @@ def clean_and_convert(s):
             return np.nan
     except ValueError:  #
         s = re.sub(r'[^0-9.]+', '', s)  # Remove non-numeric characters
+        if int(s) < 0 or int(s) > 122:
+            return np.nan
 
     return int(s) if s.isdigit() else float(s)
 
