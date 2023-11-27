@@ -643,7 +643,7 @@ CLASS_EVAL_METRICS: dict[str, Callable] = {
 }
 
 
-def run_NB(trnX, trnY, tstX, tstY, metric: str = "accuracy") -> dict[str, float]:
+def run_NB(trnX, trnY, tstX, tstY, metric: str = "accuracy", neg=False) -> dict[str, float]:
     estimators: dict[str, GaussianNB | MultinomialNB | BernoulliNB] = {
         "GaussianNB": GaussianNB(),
         "MultinomialNB": MultinomialNB(),
@@ -654,6 +654,8 @@ def run_NB(trnX, trnY, tstX, tstY, metric: str = "accuracy") -> dict[str, float]
     eval: dict[str, float] = {}
 
     for clf in estimators:
+        if neg and clf == "MultinomialNB":
+            continue
         estimators[clf].fit(trnX, trnY)
         prdY: ndarray = estimators[clf].predict(tstX)
         performance: float = CLASS_EVAL_METRICS[metric](tstY, prdY)
@@ -688,7 +690,7 @@ def run_KNN(trnX, trnY, tstX, tstY, metric="accuracy") -> dict[str, float]:
 
 
 def evaluate_approach(
-    train: DataFrame, test: DataFrame, target: str = "class", metric: str = "accuracy"
+    train: DataFrame, test: DataFrame, target: str = "class", metric: str = "accuracy", neg=False
 ) -> dict[str, list]:
     trnY = train.pop(target).values
     trnX: ndarray = train.values
@@ -696,7 +698,7 @@ def evaluate_approach(
     tstX: ndarray = test.values
     eval: dict[str, list] = {}
 
-    eval_NB: dict[str, float] | None = run_NB(trnX, trnY, tstX, tstY, metric=metric)
+    eval_NB: dict[str, float] | None = run_NB(trnX, trnY, tstX, tstY, metric=metric, neg=neg)
     eval_KNN: dict[str, float] | None = run_KNN(trnX, trnY, tstX, tstY, metric=metric)
     if eval_NB != {} and eval_KNN != {}:
         for met in CLASS_EVAL_METRICS:
