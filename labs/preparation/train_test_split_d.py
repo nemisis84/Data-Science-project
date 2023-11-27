@@ -68,10 +68,10 @@ def split_and_test(filename, target, output, id, neg=False):
     plt.savefig(f"{output}_evaluation_{id}.png")
     show()
 
-
+### Needs to be updated to fit the datasets you want to test
 if __name__ == "__main__":
     # Approach one
-    fin1 = '../../datasets/prepared/class_credit_score_2_1.csv'
+    fin1 = '../../datasets/prepared/class_credit_score_2_1.csv'  # Marginally better
     # Approach two
     fin2 = '../../datasets/prepared/class_credit_score_2_knn.csv'
     # Target, should be the same for both approaches
@@ -81,8 +81,8 @@ if __name__ == "__main__":
 
     # run the function, the id is used to differentiate the output files. for MVI I used 'custom' and 'knn'
     # If your dataset has negative values, add neg=True
-    split_and_test(fin1, fin_tar, fin_out, 'custom', neg=True)
-    split_and_test(fin2, fin_tar, fin_out, 'knn', neg=True)
+    # split_and_test(fin1, fin_tar, fin_out, 'custom', neg=True)
+    # split_and_test(fin2, fin_tar, fin_out, 'knn', neg=True)
 
     # Then do the same for the health datasets
     cov1 = '../../datasets/prepared/class_pos_covid_2_1.csv'
