@@ -5,11 +5,13 @@ from labs.preparation.missing_values_functions import impute_credithistory, impu
 
 
 def init_impute(data):
-    # Drops no variables, but drops 0.2% of the records (1117)
+    # Drops no variables, but drops 0.3% of the records (1 286)
     df = mvi_by_dropping(data, min_pct_per_variable=0.9, min_pct_per_record=0.85)
     df.reset_index(drop=True, inplace=True)
+    print(df.shape)
 
     return df
+
 
 def imputate_health_custom(data, save=False):
     df = init_impute(data)
@@ -34,12 +36,14 @@ def imputate_health_custom(data, save=False):
     impute_column(df, 'DeafOrHardOfHearing', 'mode')
     impute_column(df, 'BlindOrVisionDifficulty', 'mode')
     impute_column(df, 'DifficultyConcentrating', 'mode')
+    impute_column(df, 'DifficultyDressingBathing', 'mode')
     impute_column(df, 'DifficultyWalking', 'mode')
     impute_column(df, 'DifficultyErrands', 'mode')
     impute_column(df, 'SmokerStatus', 'mode')
     impute_column(df, 'ECigaretteUsage', 'mode')
     impute_column(df, 'ChestScan', 'mode')
     impute_column(df, 'AgeCategory', 'mode')
+    impute_column(df, 'RaceEthnicityCategory', 'mode')
     impute_column(df, 'HeightInMeters', 'mean', rounding=2)
     impute_column(df, 'WeightInKilograms', 'mean', rounding=2)
     impute_column(df, 'BMI', 'median', rounding=2)
@@ -66,6 +70,6 @@ def impute_health_knn(data, save=False):
 
 if __name__ == "__main__":
     cov = pd.read_csv('../../datasets/prepared/class_pos_covid_encoded_1.csv', na_values="")
-    # imputate_health_custom(fin, save=True)
-    # impute_health_knn(fin,save=True)
+    # imputate_health_custom(cov, save=True)
+    # impute_health_knn(cov, save=True)
 
