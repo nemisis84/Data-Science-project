@@ -34,6 +34,7 @@ def imputate_health_custom(data, save=False):
     impute_column(df, 'DeafOrHardOfHearing', 'mode')
     impute_column(df, 'BlindOrVisionDifficulty', 'mode')
     impute_column(df, 'DifficultyConcentrating', 'mode')
+    impute_column(df, 'DifficultyDressingBathing', 'mode')
     impute_column(df, 'DifficultyWalking', 'mode')
     impute_column(df, 'DifficultyErrands', 'mode')
     impute_column(df, 'SmokerStatus', 'mode')
@@ -66,6 +67,6 @@ def impute_health_knn(data, save=False):
 
 if __name__ == "__main__":
     cov = pd.read_csv('../../datasets/prepared/class_pos_covid_encoded_1.csv', na_values="")
-    # imputate_health_custom(fin, save=True)
-    # impute_health_knn(fin,save=True)
+    # imputate_health_custom(cov, save=True)
+    # impute_health_knn(cov, save=True)
 
