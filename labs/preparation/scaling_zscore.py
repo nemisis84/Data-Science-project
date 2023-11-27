@@ -17,6 +17,8 @@ def scale_zscore(data: DataFrame, target, save=False, file_prefix=""):
     transf: StandardScaler = StandardScaler(with_mean=True, with_std=True, copy=True).fit(data)
     df_zscore = DataFrame(transf.transform(data), index=data.index)
     df_zscore[target] = target_data
+    cols.remove(target)
+    cols.append(target)
     df_zscore.columns = cols
     if save:
         df_zscore.to_csv(f"../../datasets/prepared/{file_prefix}_4_zscore.csv", index=False)
