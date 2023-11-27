@@ -26,7 +26,7 @@ def split_datasets(df, target, id, path='../../datasets/prepared/split/data'):
     y: array = df.pop(target).to_list()
     x: ndarray = df.values
 
-    trnX, tstX, trnY, tstY = train_test_split(x, y, train_size=0.7, stratify=y)
+    trnX, tstX, trnY, tstY = train_test_split(x, y, train_size=0.7, stratify=y, random_state=42)  # Set the seed
 
     train: DataFrame = concat(
         [DataFrame(trnX, columns=df.columns), DataFrame(trnY, columns=[target])], axis=1
