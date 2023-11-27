@@ -47,6 +47,8 @@ def clean_and_convert(s):
             return np.nan
     except ValueError:  #
         s = re.sub(r'[^0-9.]+', '', s)  # Remove non-numeric characters
+        if int(s) < 0 or int(s) > 122:
+            return np.nan
 
     return int(s) if s.isdigit() else float(s)
 
@@ -89,6 +91,19 @@ def calulate_age(age_categories):
         mean_ages.append((years + months / 12))
     return mean_ages
 
+def remove_negatives(df, exclude_cols=None):
+    if exclude_cols is None:
+        # If no specific columns provided, apply to all columns
+        mask = df < 0
+    else:
+        # Apply the mask only to the specified columns
+        include_cols = df.columns.drop(exclude_cols)
+        mask = df[include_cols] < 0
+    
+    # Replace negative values with NaN
+    df[mask] = np.nan
+    return df
+
 def encode_services():
     df = pd.read_csv('../../datasets/class_credit_score.csv')
     df.drop(columns=["ID", "SSN", "Name"], inplace=True)
@@ -128,6 +143,8 @@ def encode_services():
 
     df = handle_months(df)
     df.drop(columns=["Month", "Type_of_Loan"], inplace=True)
+
+    df = remove_negatives(df, exclude_cols=["Customer_ID", "Month_cos", "Month_sin", "ChangedCreditLimit", "Delay_from_due_date"])
 
     df.to_csv('../../datasets/prepared/class_credit_score_encoded_1.csv', index=False)
 
