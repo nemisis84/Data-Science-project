@@ -10,7 +10,7 @@ from split_data import only_eval
 
 
 def select_variables(df, target, path, method='redundant', param=0.5):
-    train, test = train_test_split(df, train_size=0.7)
+    train, test = train_test_split(df, train_size=0.7, random_state=42)
 
     if method == 'variance':
         print("Original variables", train.columns.to_list())
