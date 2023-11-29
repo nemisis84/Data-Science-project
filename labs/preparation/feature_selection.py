@@ -11,7 +11,7 @@ def select_variables(df, target, path, method='redundant'):
     
     if method == 'variance':
         print("Original variables", train.columns.to_list())
-        vars2drop: list[str] = select_low_variance_variables(train, 3, target=target)
+        vars2drop: list[str] = select_low_variance_variables(train, 10, target=target)
         print("Variables to drop", vars2drop)  
 
     elif method == 'redundant':
@@ -28,9 +28,9 @@ def select_variables(df, target, path, method='redundant'):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv('../../datasets/prepared/class_pos_covid_outliers_iqr.csv')
+    df = pd.read_csv('../../datasets/prepared/class_credit_score_4_zscore.csv')
     df = df.dropna()
     path = '../../datasets/prepared/'
-    target = 'CovidPos'
+    target = 'Credit_Score'
     select_variables(df, target, path, method='variance')
 

@@ -1,7 +1,5 @@
-import pandas as pd
-
-from helpers.dslabs_functions import mvi_by_dropping, mvi_by_filling
-from labs.preparation.missing_values_functions import impute_credithistory, impute_column
+from helpers.dslabs_functions import mvi_by_dropping
+from labs.preparation.missing_values_functions import impute_column
 
 
 def init_impute(data):
@@ -13,7 +11,7 @@ def init_impute(data):
     return df
 
 
-def imputate_health_custom(data, save=False):
+def impute_health(data, save=False):
     df = init_impute(data)
 
     impute_column(df, 'GeneralHealth', 'mode')
@@ -55,21 +53,6 @@ def imputate_health_custom(data, save=False):
     impute_column(df, 'HighRiskLastYear', 'mode')
 
     if save:
-        df.to_csv('../../datasets/prepared/class_pos_covid_2_1.csv', index=False)
+        df.to_csv('../../datasets/prepared/2_CovidPos.csv', index=False)
 
     return df
-
-
-def impute_health_knn(data, save=False):
-    df = init_impute(data)
-    df = mvi_by_filling(df, 'knn')
-    if save:
-        df.to_csv('../../datasets/prepared/class_pos_covid_2_knn.csv', index=False)
-    return df
-
-
-if __name__ == "__main__":
-    cov = pd.read_csv('../../datasets/prepared/class_pos_covid_encoded_1.csv', na_values="")
-    # imputate_health_custom(cov, save=True)
-    # impute_health_knn(cov, save=True)
-
