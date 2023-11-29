@@ -7,7 +7,6 @@ from missing_values_health import impute_health
 from missing_values_services import impute_services
 from outliers_truncate import truncate_outliers
 from scaling_zscore import scale_zscore
-from split_data import split_datasets
 from balancing import SMOTE_balancing, sampling
 from feature_selection import select_variables
 from helpers.dslabs_functions import evaluate_approach, plot_multibar_chart
@@ -47,12 +46,6 @@ def select_features(df_in, target):
     path = f"../../datasets/prepared/5_{target}_select_features_"
     train, test = select_variables(df_in, target, path, method="variance", param=0.5)
     return train, test
-
-
-def split_dataset(df_in, target):
-    train, test = split_datasets(df_in, target)
-    return [train, test]
-
 
 def balance_training(train_in, target):
     path = f"../../datasets/prepared/7_{target}_train.csv"
@@ -97,6 +90,9 @@ def main(file):
     train, test = select_features(df, target)
     print("Balancing...")
     train = balance_training(train, target)
+
+    train.to_csv(f"../../datasets/prepared/{target}_train.csv", index=False)
+    test.to_csv(f"../../datasets/prepared/{target}_test.csv", index=False)
     print("Evaluating...")
     eval_dataset(train, test, target)
 
