@@ -1,4 +1,11 @@
 # Data-Science-project
+## Naming convention
+### Figures
+"/figures/dataset/projectPart/method_typeOfFigure.png"
+For example for KNN in the evaluation part of project:
+```bash
+"/figures/CovidPos/Evaluation/KNN_overfitting.png"
+```
 
 ## Setup environment
 
