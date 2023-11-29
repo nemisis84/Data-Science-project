@@ -23,7 +23,7 @@ def select_variables(df, target, path, method='redundant', param=0.5):
     
     
     train_cp, test_cp = apply_feature_selection(
-    train, test, vars2drop, filename=f"{path}", tag="redundant"
+    train, test, vars2drop, filename=f"{path}", tag=method
         )
     print(f"\n\nOriginal data: train={train.shape}, test={test.shape}")
     print(f"After {method} FS: train_cp={train_cp.shape}, test_cp={test_cp.shape}")

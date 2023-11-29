@@ -9,6 +9,7 @@ from outliers_truncate import truncate_outliers
 from scaling_zscore import scale_zscore
 from split_data import split_datasets
 from balancing import SMOTE_balancing, sampling
+from feature_selection import select_variables
 from helpers.dslabs_functions import evaluate_approach, plot_multibar_chart
 
 
@@ -43,8 +44,9 @@ def scale_data(df_in, target):  # Scale
 
 
 def select_features(df_in, target):  # Feature selection
-    # FIXME: Add feature selection
-    return df_in
+    path = f"../../datasets/prepared/6_{target}_select_features_"
+    train, test = select_variables(df_in, target, path, method="variance", param=0.5)
+    return train, test
 
 
 def split_dataset(df_in, target):  # Train test split
@@ -92,9 +94,7 @@ def main(file):
     print("Scaling...")
     df = scale_data(df, target)  # Scale
     print("Feature selection...")
-    df = select_features(df, target)  # Feature selection
-    print("Splitting...")
-    train, test = split_dataset(df, target)  # Train test split
+    train, test = select_features(df, target)  # Feature selection
     print("Balancing...")
     train = balance_training(train, target)  # balance train set
     print("Evaluating...")
@@ -104,5 +104,5 @@ def main(file):
 
 
 if __name__ == "__main__":
-    main('../../datasets/Credit_Score.csv')
+    # main('../../datasets/Credit_Score.csv')
     main('../../datasets/CovidPos.csv')
