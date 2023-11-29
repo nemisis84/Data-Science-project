@@ -28,13 +28,13 @@ def split_datasets(df, target):
     return train, test
 
 def only_eval(train, test, target, output, id, neg=False):
+    plt.figure()
     eval = evaluate_approach(train, test, target, neg=neg)
     print(eval)
     plot_multibar_chart(
         ["NB", "KNN"], eval, title=f"{target} {id} evaluation", percentage=True
     )
     plt.savefig(f"{output}_evaluation_{id}.png")
-    show()
 
 def split_and_test(filename, target, output, id, neg=False):
     df = pd.read_csv(filename, na_values="")

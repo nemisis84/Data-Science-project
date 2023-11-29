@@ -44,7 +44,7 @@ def scale_data(df_in, target):
 
 
 def select_features(df_in, target):
-    path = f"../../datasets/prepared/6_{target}_select_features_"
+    path = f"../../datasets/prepared/5_{target}_select_features_"
     train, test = select_variables(df_in, target, path, method="variance", param=0.5)
     return train, test
 
