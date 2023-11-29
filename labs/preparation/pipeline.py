@@ -13,7 +13,7 @@ from feature_selection import select_variables
 from helpers.dslabs_functions import evaluate_approach, plot_multibar_chart
 
 
-def encode_data(df_in, target):  # Encode
+def encode_data(df_in, target):
     if 'Covid' in target:
         df = encode_health(df_in)
     else:
@@ -22,7 +22,7 @@ def encode_data(df_in, target):  # Encode
     return df
 
 
-def imputate_data(df_in, target):  # MVI
+def imputate_data(df_in, target):
     if 'CovidPos' in target:
         df = impute_health(df_in, save=True)
     else:
@@ -31,40 +31,40 @@ def imputate_data(df_in, target):  # MVI
     return df
 
 
-def outlier_handling(df, target):  # outliers
+def outlier_handling(df, target):
     truncate_outliers(df, file_prefix=target)
 
     return df
 
 
-def scale_data(df_in, target):  # Scale
+def scale_data(df_in, target):
     df = scale_zscore(df_in, target)
 
     return df
 
 
-def select_features(df_in, target):  # Feature selection
+def select_features(df_in, target):
     path = f"../../datasets/prepared/6_{target}_select_features_"
     train, test = select_variables(df_in, target, path, method="variance", param=0.5)
     return train, test
 
 
-def split_dataset(df_in, target):  # Train test split
+def split_dataset(df_in, target):
     train, test = split_datasets(df_in, target)
     return [train, test]
 
 
-def balance_training(train_in, target):  # balance train set
+def balance_training(train_in, target):
     path = f"../../datasets/prepared/7_{target}_train.csv"
-    # if 'CovidPos' in target:
+    #if 'CovidPos' in target:
     train_out = sampling(train_in, target, path=path, sampling="undersampling")
-    # else:
+    #else:
     #    train_out = SMOTE_balancing(train_in, target, 42, path=path, sampling_strategy="minority")
 
     return train_out
 
 
-def eval_dataset(train, test, target):  # Evaluate
+def eval_dataset(train, test, target):
     eval = evaluate_approach(train, test, target, neg=True)
     plot_multibar_chart(
         ["NB", "KNN"], eval, title=f"{target} evaluation", percentage=True
@@ -86,23 +86,23 @@ def main(file):
           f"Starting pipeline for {target}...")
     df = pd.read_csv(file)
     print("Encoding...")
-    df = encode_data(df, target)  # Encode
+    df = encode_data(df, target)
     print("Imputating...")
-    df = imputate_data(df, target)  # MVI
+    df = imputate_data(df, target)
     print("Outlier handling...")
-    df = outlier_handling(df, target)  # outliers
+    df = outlier_handling(df, target)
     print("Scaling...")
-    df = scale_data(df, target)  # Scale
+    df = scale_data(df, target)
     print("Feature selection...")
-    train, test = select_features(df, target)  # Feature selection
+    train, test = select_features(df, target)
     print("Balancing...")
-    train = balance_training(train, target)  # balance train set
+    train = balance_training(train, target)
     print("Evaluating...")
-    eval_dataset(train, test, target)  # Evaluate
+    eval_dataset(train, test, target)
 
     print(f"Pipeline for {target} finished.\n\n")
 
 
 if __name__ == "__main__":
-    # main('../../datasets/Credit_Score.csv')
+    main('../../datasets/Credit_Score.csv')
     main('../../datasets/CovidPos.csv')
