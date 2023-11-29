@@ -69,9 +69,7 @@ def transform_bools(df, keyword):
     return df
 
 
-def encode_health():
-    df = pd.read_csv('../../datasets/class_pos_covid.csv')
-
+def encode_health(df):
     # Binaries
     yes_no: dict[str, int] = {"no": 0, "No": 0, "yes": 1, "Yes": 1}
     sex_values: dict[str, int] = {"Female": 0, "Male": 1}
@@ -116,9 +114,5 @@ def encode_health():
     encoding["RaceEthnicityCategory"] = race_ethnicity_category_encoding
     df = encode_symbolic(df, encoding)
 
-    df.to_csv("../../datasets/prepared/class_pos_covid_encoded_1.csv", index=False)
-
-
-if __name__ == "__main__":
-    encode_health()
-
+    df.to_csv("../../datasets/prepared/1_CovidPos.csv", index=False)
+    return df
