@@ -69,6 +69,7 @@ def split_and_test(filename, target, output, id, neg=False):
     show()
 
 def only_eval(train, test, target, output, id, neg=False):
+    plt.figure()
     eval = evaluate_approach(train, test, target, neg=neg)
     print(eval)
     plot_multibar_chart(

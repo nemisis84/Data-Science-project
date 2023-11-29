@@ -20,7 +20,8 @@ def select_variables(df, target, path, method='redundant', param=0.5):
         print("Original variables", train.columns.values)
         vars2drop: list[str] = select_redundant_variables(train, min_threshold=param, target=target)
         print("\n\nVariables to drop", vars2drop)
-
+    
+    
     train_cp, test_cp = apply_feature_selection(
     train, test, vars2drop, filename=f"{path}", tag="redundant"
         )
@@ -31,7 +32,7 @@ def select_variables(df, target, path, method='redundant', param=0.5):
 
 if __name__ == "__main__":
     # Credit_score
-    df = pd.read_csv('../../datasets/prepared/class_credit_score_4_zscore.csv').iloc[:1000]
+    df = pd.read_csv('../../datasets/prepared/class_credit_score_4_zscore.csv')
     target = "Credit_Score"
     path = '../../datasets/feature_selection/Credit_Score_featureSelection'
     # Variance

@@ -5,3 +5,4 @@
 __pycache__/
 environment.yaml
 *.egg-info/*
+*simens_exploration.ipynb
