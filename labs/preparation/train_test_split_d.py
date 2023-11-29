@@ -68,6 +68,14 @@ def split_and_test(filename, target, output, id, neg=False):
     plt.savefig(f"{output}_evaluation_{id}.png")
     show()
 
+def only_eval(train, test, target, output, id, neg=False):
+    eval = evaluate_approach(train, test, target, neg=neg)
+    print(eval)
+    plot_multibar_chart(
+        ["NB", "KNN"], eval, title=f"{target} {id} evaluation", percentage=True
+    )
+    plt.savefig(f"{output}_evaluation_{id}.png")
+
 ### Needs to be updated to fit the datasets you want to test
 if __name__ == "__main__":
     # Approach one
