@@ -56,7 +56,7 @@ def NaiveBayes(train_set, test_set, target, metric: str = "accuracy"):
 
     figure(figsize=(3.5, 4))
     best_model, params = naive_Bayes_study(trnX, trnY, tstX, tstY, metric)
-    savefig(f"../../figures/modelling/NB_{target}_{metric}_study.png")
+    savefig(f"../../figures/{target}/Evaluation/NB_{metric}_study.png")
     clf()
 
 
@@ -83,7 +83,7 @@ def best_model_results(train_set, test_set, target, approach, model_name, metric
     prd_tst: array = model.predict(tstX)
     figure()
     plot_evaluation_results(model_description, trnY, prd_trn, tstY, prd_tst, labels)
-    savefig(f'../../figures/modelling/NB_{target}_{model_description["name"]}_best_{model_description["metric"]}_eval.png')
+    savefig(f'../../figures/{target}/Evaluation/NB_{model_description["name"]}_best_{model_description["metric"]}_eval.png')
     clf()
 
 
