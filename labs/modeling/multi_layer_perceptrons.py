@@ -99,15 +99,12 @@ def find_best_mlp(trnX, trnY, tstX, tstY, target, metric):
 
 
 def do_MLP_yeah(train, test, target, metric):
+    # FIXME: This doesn't work as the length are different, try flipping it.
     trnX, tstX, trnY, tstY, labels, vars = read_train_test_from_files(
         train, test, target
     )
-    print(f"Variables={vars}")
-    print(f"TrainX#={len(trnX)} TestX#={len(tstX)}")
-    print(f"TrainY#={len(trnY)} TestY#={len(tstY)}")
-    print(f"Labels={labels}")
 
-    best_model, params = find_best_mlp(trnX, tstX, trnY, tstY, labels, metric)
+    best_model, params = find_best_mlp(trnX, trnY, tstX, tstY, target, metric)
 
     prd_trn: array = best_model.predict(trnX)
     prd_tst: array = best_model.predict(tstX)
@@ -146,7 +143,7 @@ def do_MLP_yeah(train, test, target, metric):
     plot_multiline_chart(
         nr_iterations,
         {"Train": y_trn_values, "Test": y_tst_values},
-        title=f"MLP overfitting study for lr_type={lr_type} and lr={lr}",
+        title=f"MLP overfitting study for lr_type={lr_type} and lr={lr} target={target} metric={metric}",
         xlabel="nr_iterations",
         ylabel=str(metric),
         percentage=True,
@@ -154,8 +151,8 @@ def do_MLP_yeah(train, test, target, metric):
     savefig(f"../../figures/modeling/{target}_mlp_{metric}_overfitting.png")
 
 if __name__ == "__main__":
-    train = "../../datasets/prepared/CovidPos_train.csv"
-    test = "../../datasets/prepared/CovidPos_test.csv"
-    target = "CovidPos"
-    metric = "accuracy"
+    train = "../../datasets/prepared/Credit_Score_train.csv"
+    test = "../../datasets/prepared/Credit_Score_test.csv"
+    target = "Credit_Score"
+    metric = "precision"
     do_MLP_yeah(train, test, target, metric)
