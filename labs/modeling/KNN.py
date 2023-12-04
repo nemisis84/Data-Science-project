@@ -91,11 +91,17 @@ def KNN(train_set, test_set, target, k_max: int=19, metric: str = "accuracy"):
 
 
 if __name__ == "__main__":
-    CovidPos_train = '../../datasets/tests/7_CovidPos_train.csv'
-    CovidPos_test = '../../datasets/tests/6_CovidPos_select_features__test_variance.csv'
+    CovidPos_train = '../../datasets/prepared/7_CovidPos_train.csv'
+    CovidPos_test = '../../datasets/prepared/6_CovidPos_select_features__test_variance.csv'
     CovidPos_target = 'CovidPos'
 
     KNN(CovidPos_train, CovidPos_test, CovidPos_target, k_max = 25)
+
+    Credit_Score_train = '../../datasets/prepared/7_Credit_Score_train.csv'
+    Credit_Score_test = '../../datasets/prepared/6_Credit_Score_select_features__test_variance.csv'
+    Credit_Score_target = 'Credit_Score'
+
+    KNN(Credit_Score_train, Credit_Score_test, Credit_Score_target, k_max = 25)
 
 
 
