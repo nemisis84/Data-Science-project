@@ -117,20 +117,22 @@ def plot_dec_trees(best_model, vars, labels, target, metric):
 
 
 if __name__ == "__main__":
-    train_f = "../../datasets/prepared/Credit_Score_train.csv"
-    test_f = "../../datasets/prepared/Credit_Score_test.csv"
-    target_s = "Credit_Score"
-    for metric_s in ['accuracy']:
-        trnX_s, tstX_s, trnY_s, tstY_s, labels_s, vars_s = read_train_test_from_files(train_f, test_f, target_s)
-        best_model_s, params_s = trees_study(trnX_s, trnY_s, tstX_s, tstY_s, d_max=25, metric=metric_s)
 
-        do_decision_trees(best_model_s, params_s, target_s, metric_s, trnX_s, tstX_s, trnY_s, tstY_s, labels_s)
-        overfitting_study(params_s, target_s, metric_s, trnX_s, tstX_s, trnY_s, tstY_s)
-        var_importance(best_model_s, vars_s, target_s, metric_s)
-        plot_dec_trees(best_model_s, vars_s, labels_s, target_s, metric_s)
+    for target_s in ["Credit_Score", "CovidPos"]:
+        train_f = f"../../datasets/prepared/{target_s}_train.csv"
+        test_f = f"../../datasets/prepared/{target_s}_test.csv"
+        for metric_s in ['accuracy', 'recall', 'precision']:
+            trnX_s, tstX_s, trnY_s, tstY_s, labels_s, vars_s = read_train_test_from_files(train_f, test_f, target_s)
+            figure()
+            best_model_s, params_s = trees_study(trnX_s, trnY_s, tstX_s, tstY_s, d_max=25, metric=metric_s)
+            savefig(f'../../figures/modeling/DT/{target_s}_dt_{metric_s}_study.png')
+            do_decision_trees(best_model_s, params_s, target_s, metric_s, trnX_s, tstX_s, trnY_s, tstY_s, labels_s)
+            overfitting_study(params_s, target_s, metric_s, trnX_s, tstX_s, trnY_s, tstY_s)
+            var_importance(best_model_s, vars_s, target_s, metric_s)
+            plot_dec_trees(best_model_s, vars_s, labels_s, target_s, metric_s)
 
 '''
-Decision trees:
+Decision trees for Credit_Score:
 same tree for accuracy, precision and recall
 precision has lower importance for outstandingdebt and more for the next four variables
 Same overfitting graph for all of them
