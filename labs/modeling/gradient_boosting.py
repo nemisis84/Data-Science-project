@@ -162,7 +162,7 @@ if __name__ == "__main__":
     train_filename = dataset_path + "7_CovidPos_train.csv"
     test_filename = dataset_path + "6_CovidPos_select_features__test_variance.csv"
     target = "CovidPos"
-    figure_path = "../../figures/CovidPos/Evaluation/"
+    figure_path = "../../figures/modeling/gradient_boosting/CovidPos_"
     best_model, params, trnX, tstX, trnY, tstY, vars = study_and_train(train_filename, test_filename, target, path = figure_path)
     gradient_boosting_variables_studies(best_model, vars, path=figure_path)
     gradient_boosting_overfitting_study(trnX, trnY, path=figure_path)
@@ -172,7 +172,7 @@ if __name__ == "__main__":
     train_filename = dataset_path + "7_Credit_Score_train.csv"
     test_filename = dataset_path +"6_Credit_Score_select_features__test_variance.csv"
     target = "Credit_Score"
-    figure_path = "../../figures/Credit_Score/Evaluation/"
+    figure_path = "../../figures/modeling/gradient_boosting/Credit_Score_"
     best_model, params, trnX, tstX, trnY, tstY, vars = study_and_train(train_filename, test_filename, target, path = figure_path)
     gradient_boosting_variables_studies(best_model, vars, path=figure_path)
     gradient_boosting_overfitting_study(trnX, trnY, path=figure_path)
