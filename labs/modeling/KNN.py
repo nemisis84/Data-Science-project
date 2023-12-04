@@ -6,12 +6,13 @@ from matplotlib.pyplot import figure, savefig, show, clf
 from helpers.dslabs_functions import CLASS_EVAL_METRICS, DELTA_IMPROVE, plot_multiline_chart
 from helpers.dslabs_functions import read_train_test_from_files, plot_evaluation_results
 
+
 def knn_study(
-        trnX: ndarray, trnY: array, tstX: ndarray, tstY: array, k_max: int=19, lag: int=2, metric='accuracy'
-        ) -> tuple[KNeighborsClassifier | None, dict]:
+        trnX: ndarray, trnY: array, tstX: ndarray, tstY: array, k_max: int = 19, lag: int = 2, metric='accuracy'
+) -> tuple[KNeighborsClassifier | None, dict]:
     dist: list[Literal['manhattan', 'euclidean', 'chebyshev']] = ['manhattan', 'euclidean', 'chebyshev']
 
-    kvalues: list[int] = [i for i in range(1, k_max+1, lag)]
+    kvalues: list[int] = [i for i in range(1, k_max + 1, lag)]
     best_model: KNeighborsClassifier | None = None
     best_params: dict = {'name': 'KNN', 'metric': metric, 'params': ()}
     best_performance: float = 0.0
@@ -29,21 +30,22 @@ def knn_study(
                 best_performance: float = eval
                 best_params['params'] = (k, d)
                 best_model = clf
-            #print(f'KNN {d} k={k}')
+            # print(f'KNN {d} k={k}')
         values[d] = y_tst_values
     print(f'KNN best with k={best_params['params'][0]} and {best_params['params'][1]}')
     plot_multiline_chart(kvalues, values, title=f'KNN Models ({metric})', xlabel='k', ylabel=metric, percentage=True)
 
     return best_model, best_params
 
-def KNN(train_set, test_set, target, k_max: int=19, metric: str = "accuracy"):
+
+def KNN(train_set, test_set, target, k_max: int = 19, metric: str = "accuracy"):
     trnX: ndarray
     tstX: ndarray
     trnY: array
     tstY: array
     labels: list
     vars: list
-    
+
     trnX, tstX, trnY, tstY, labels, vars = read_train_test_from_files(
         train_set, test_set, target
     )
@@ -52,15 +54,16 @@ def KNN(train_set, test_set, target, k_max: int=19, metric: str = "accuracy"):
     print(f'Labels={labels}')
 
     figure()
-    best_model, params = knn_study(trnX, trnY, tstX, tstY, k_max = k_max, metric = metric)
-    savefig(f"../../figures/{target}/Evaluation/KNN_{metric}_study.png")
+    best_model, params = knn_study(trnX, trnY, tstX, tstY, k_max=k_max, metric=metric)
+    savefig(f"../../figures/modeling/KNN/{target}_KNN_{metric}_study.png")
     plt.clf()
 
-    prd_trn: array = best_model.predict(trnX)    
+    prd_trn: array = best_model.predict(trnX)
     prd_tst: array = best_model.predict(tstX)
     figure()
     plot_evaluation_results(params, trnY, prd_trn, tstY, prd_tst, labels)
-    savefig(f'../../figures/{target}/Evaluation/KNN_best_model_{metric}_{params['params'][0]}_{params['params'][1]}.png')
+    savefig(
+        f'../../figures/modeling/KNN/{target}_KNN_best_model_{metric}_{params['params'][0]}_{params['params'][1]}.png')
     plt.clf()
 
     distance: Literal["manhattan", "euclidean", "chebyshev"] = params["params"][1]
@@ -85,9 +88,8 @@ def KNN(train_set, test_set, target, k_max: int=19, metric: str = "accuracy"):
         xlabel="K",
         ylabel=str(metric),
         percentage=True,
-        )
-    savefig(f'../../figures/{target}/Evaluation/KNN_{metric}_overfitting.png')
-
+    )
+    savefig(f'../../figures/modeling/KNN/{target}_KNN_{metric}_overfitting.png')
 
 
 if __name__ == "__main__":
@@ -95,14 +97,10 @@ if __name__ == "__main__":
     CovidPos_test = '../../datasets/tests/6_CovidPos_select_features__test_variance.csv'
     CovidPos_target = 'CovidPos'
 
-    KNN(CovidPos_train, CovidPos_test, CovidPos_target, k_max = 25, metric = 'recall')
+    KNN(CovidPos_train, CovidPos_test, CovidPos_target, k_max=25, metric='accuracy')
 
-"""     Credit_Score_train = '../../datasets/prepared/7_Credit_Score_train.csv'
+    Credit_Score_train = '../../datasets/prepared/7_Credit_Score_train.csv'
     Credit_Score_test = '../../datasets/prepared/6_Credit_Score_select_features__test_variance.csv'
     Credit_Score_target = 'Credit_Score'
 
-    KNN(Credit_Score_train, Credit_Score_test, Credit_Score_target, k_max = 25) """
-
-
-
-
+    KNN(Credit_Score_train, Credit_Score_test, Credit_Score_target, k_max=25)
