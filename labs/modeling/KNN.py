@@ -60,7 +60,7 @@ def KNN(train_set, test_set, target, k_max: int=19, metric: str = "accuracy"):
     prd_tst: array = best_model.predict(tstX)
     figure()
     plot_evaluation_results(params, trnY, prd_trn, tstY, prd_tst, labels)
-    savefig(f'../../figures/{target}/Evaluation/KNN_best_model_{params['params'][0]}_{params['params'][1]}.png')
+    savefig(f'../../figures/{target}/Evaluation/KNN_best_model_{metric}_{params['params'][0]}_{params['params'][1]}.png')
     plt.clf()
 
     distance: Literal["manhattan", "euclidean", "chebyshev"] = params["params"][1]
@@ -86,22 +86,22 @@ def KNN(train_set, test_set, target, k_max: int=19, metric: str = "accuracy"):
         ylabel=str(metric),
         percentage=True,
         )
-    savefig(f'../../figures/{target}/Evaluation/KNN_overfitting.png')
+    savefig(f'../../figures/{target}/Evaluation/KNN_{metric}_overfitting.png')
 
 
 
 if __name__ == "__main__":
-    CovidPos_train = '../../datasets/prepared/7_CovidPos_train.csv'
-    CovidPos_test = '../../datasets/prepared/6_CovidPos_select_features__test_variance.csv'
+    CovidPos_train = '../../datasets/tests/7_CovidPos_train.csv'
+    CovidPos_test = '../../datasets/tests/6_CovidPos_select_features__test_variance.csv'
     CovidPos_target = 'CovidPos'
 
-    KNN(CovidPos_train, CovidPos_test, CovidPos_target, k_max = 25)
+    KNN(CovidPos_train, CovidPos_test, CovidPos_target, k_max = 25, metric = 'recall')
 
-    Credit_Score_train = '../../datasets/prepared/7_Credit_Score_train.csv'
+"""     Credit_Score_train = '../../datasets/prepared/7_Credit_Score_train.csv'
     Credit_Score_test = '../../datasets/prepared/6_Credit_Score_select_features__test_variance.csv'
     Credit_Score_target = 'Credit_Score'
 
-    KNN(Credit_Score_train, Credit_Score_test, Credit_Score_target, k_max = 25)
+    KNN(Credit_Score_train, Credit_Score_test, Credit_Score_target, k_max = 25) """
 
 
 
