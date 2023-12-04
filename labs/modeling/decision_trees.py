@@ -1,7 +1,9 @@
 from typing import Literal
+
+from matplotlib.pyplot import figure, savefig
 from numpy import array, ndarray, argsort
-from matplotlib.pyplot import figure, savefig, show, close
 from sklearn.tree import DecisionTreeClassifier, plot_tree
+
 from helpers.dslabs_functions import CLASS_EVAL_METRICS, DELTA_IMPROVE, read_train_test_from_files, \
     plot_horizontal_bar_chart
 from helpers.dslabs_functions import plot_evaluation_results, plot_multiline_chart
@@ -30,7 +32,6 @@ def trees_study(
                 best_performance = eval
                 best_params['params'] = (c, d)
                 best_model = clf
-            # print(f'DT {c} and d={d}')
         values[c] = y_tst_values
     print(f'DT best with {best_params['params'][0]} and d={best_params['params'][1]}')
     plot_multiline_chart(depths, values, title=f'DT Models ({metric})', xlabel='d', ylabel=metric, percentage=True)
@@ -39,18 +40,11 @@ def trees_study(
 
 
 def do_decision_trees(best_model, params, target, metric, trnX, tstX, trnY, tstY, labels):
-    figure()
-    savefig(f'../../figures/modeling/{target}_dt_{metric}_study.png')
-    # show()
-    # close()
-
     prd_trn: array = best_model.predict(trnX)
     prd_tst: array = best_model.predict(tstX)
     figure()
     plot_evaluation_results(params, trnY, prd_trn, tstY, prd_tst, labels)
-    # show()
-    savefig(f'../../figures/modeling/{target}_dt_{params["name"]}_best_{params["metric"]}_eval.png')
-    # close()
+    savefig(f'../../figures/modeling/DT/{target}_dt_{params["name"]}_best_{params["metric"]}_eval.png')
 
 
 def overfitting_study(params, target, metric, trnX, tstX, trnY, tstY):
@@ -79,7 +73,7 @@ def overfitting_study(params, target, metric, trnX, tstX, trnY, tstY):
         ylabel=str(metric),
         percentage=True,
     )
-    savefig(f"../../figures/modeling/{target}_dt_{metric}_overfitting.png")
+    savefig(f"../../figures/modeling/DT/{target}_dt_{metric}_overfitting.png")
 
 
 def var_importance(best_model, vars, target, metric):
@@ -101,11 +95,11 @@ def var_importance(best_model, vars, target, metric):
         ylabel="variables",
         percentage=True,
     )
-    savefig(f"../../figures/modeling/{target}_dt_{metric}_vars_ranking.png")
+    savefig(f"../../figures/modeling/DT/{target}_dt_{metric}_vars_ranking.png")
 
 
 def plot_dec_trees(best_model, vars, labels, target, metric):
-    tree_filename: str = f"../../figures/modeling/{target}_dt_{metric}_best_tree"
+    tree_filename: str = f"../../figures/modeling/DT/{target}_dt_{metric}_best_tree"
     max_depth2show = 3
     st_labels: list[str] = [str(value) for value in labels]
     figure(figsize=(14, 6))
@@ -126,8 +120,7 @@ if __name__ == "__main__":
     train_f = "../../datasets/prepared/Credit_Score_train.csv"
     test_f = "../../datasets/prepared/Credit_Score_test.csv"
     target_s = "Credit_Score"
-    # metric_s = "accuracy"
-    for metric_s in ['accuracy', 'recall', 'precision']:
+    for metric_s in ['accuracy']:
         trnX_s, tstX_s, trnY_s, tstY_s, labels_s, vars_s = read_train_test_from_files(train_f, test_f, target_s)
         best_model_s, params_s = trees_study(trnX_s, trnY_s, tstX_s, tstY_s, d_max=25, metric=metric_s)
 
@@ -135,3 +128,12 @@ if __name__ == "__main__":
         overfitting_study(params_s, target_s, metric_s, trnX_s, tstX_s, trnY_s, tstY_s)
         var_importance(best_model_s, vars_s, target_s, metric_s)
         plot_dec_trees(best_model_s, vars_s, labels_s, target_s, metric_s)
+
+'''
+Decision trees:
+same tree for accuracy, precision and recall
+precision has lower importance for outstandingdebt and more for the next four variables
+Same overfitting graph for all of them
+Accuracy and recall both have "gini", 10. Preision has "gini", 18
+confusion matrix looks better for gini 10, since we have more true labels. So we will be using accuracy as the metric.
+'''
