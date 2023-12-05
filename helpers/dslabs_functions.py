@@ -620,9 +620,9 @@ def apply_feature_selection(
     tag: str = "",
 ) -> tuple[DataFrame, DataFrame]:
     train_copy: DataFrame = train.drop(vars2drop, axis=1, inplace=False)
-    train_copy.to_csv(f"{filename}_train_{tag}.csv", index=True)
+    train_copy.to_csv(f"{filename}_train_{tag}.csv", index=False)
     test_copy: DataFrame = test.drop(vars2drop, axis=1, inplace=False)
-    test_copy.to_csv(f"{filename}_test_{tag}.csv", index=True)
+    test_copy.to_csv(f"{filename}_test_{tag}.csv", index=False)
     return train_copy, test_copy
 
 

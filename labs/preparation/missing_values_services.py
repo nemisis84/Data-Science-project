@@ -1,6 +1,4 @@
-import pandas as pd
-
-from helpers.dslabs_functions import mvi_by_dropping, mvi_by_filling
+from helpers.dslabs_functions import mvi_by_dropping
 from labs.preparation.missing_values_functions import impute_credithistory, impute_column_finance
 
 
@@ -12,7 +10,7 @@ def init_impute(data):
     return df
 
 
-def imputate_missing_values_services(data, save=False):
+def impute_services(data, save=False):
     df = init_impute(data)
 
     # Custom imputation
@@ -36,22 +34,6 @@ def imputate_missing_values_services(data, save=False):
         pass
 
     if save:
-        df.to_csv('../../datasets/prepared/class_credit_score_2_1.csv', index=False)
+        df.to_csv('../../datasets/prepared/2_Credit_Score.csv', index=False)
 
     return df
-
-
-def impute_credit_score_knn(data, save=False):
-    df = init_impute(data)
-    df.drop(['Customer_ID'], axis=1, inplace=True)
-    df = mvi_by_filling(df, 'knn')
-    if save:
-        df.to_csv('../../datasets/prepared/class_credit_score_2_knn.csv', index=False)
-
-    return df
-
-
-if __name__ == "__main__":
-    fin = pd.read_csv('../../datasets/prepared/class_credit_score_encoded_1.csv', na_values="")
-    # imputate_missing_values_services(fin, save=True)
-    # impute_credit_score_knn(fin, save=True)
