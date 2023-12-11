@@ -92,7 +92,7 @@ def find_best_mlp(trnX, trnY, tstX, tstY, target, metric):
         lag=250,
         metric=metric,
     )
-    savefig(f"../../figures/modeling/{target}_mlp_{metric}_study.png")
+    savefig(f"../../figures/modeling/MLP/{target}_mlp_{metric}_study.png")
     show()
 
     return best_model, params
@@ -110,7 +110,7 @@ def do_MLP_yeah(train, test, target, metric):
     prd_tst: array = best_model.predict(tstX)
     figure()
     plot_evaluation_results(params, trnY, prd_trn, tstY, prd_tst, labels)
-    savefig(f'../../figures/modeling/{target}_mlp_{params["name"]}_best_{params["metric"]}_eval.png')
+    savefig(f'../../figures/modeling/MLP/{target}_mlp_{params["name"]}_best_{params["metric"]}_eval.png')
     show()
 
     lr_type: Literal["constant", "invscaling", "adaptive"] = params["params"][0]
@@ -148,7 +148,7 @@ def do_MLP_yeah(train, test, target, metric):
         ylabel=str(metric),
         percentage=True,
     )
-    savefig(f"../../figures/modeling/{target}_mlp_{metric}_overfitting.png")
+    savefig(f"../../figures/modeling/MLP/{target}_mlp_{metric}_overfitting.png")
 
 if __name__ == "__main__":
     train = "../../datasets/prepared/Credit_Score_train.csv"
