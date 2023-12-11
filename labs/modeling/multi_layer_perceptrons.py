@@ -151,8 +151,8 @@ def do_MLP_yeah(train, test, target, metric):
     savefig(f"../../figures/modeling/MLP/{target}_mlp_{metric}_overfitting.png")
 
 if __name__ == "__main__":
-    train = "../../datasets/prepared/Credit_Score_train.csv"
-    test = "../../datasets/prepared/Credit_Score_test.csv"
-    target = "Credit_Score"
-    metric = "precision"
+    target = "CovidPos"
+    train = f"../../datasets/prepared/{target}_train.csv"
+    test = f"../../datasets/prepared/{target}_test.csv"
+    metric = "accuracy"
     do_MLP_yeah(train, test, target, metric)
