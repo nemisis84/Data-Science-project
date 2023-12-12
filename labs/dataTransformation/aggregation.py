@@ -18,15 +18,14 @@ if __name__ == "__main__":
     agg_func = "sum"
 
     aggregated_series = aggregate(df, gran_level, agg_func)
-    print(aggregated_series.reset_index()[target])
-    path="../..data_transformation/3_{target}_monthly_aggregation.png"
+    path=f"../..data_transformation/2_{target}_monthly_aggregation.png"
     title=target+"Monthly aggregation"
     evaluate.evaluateTransformation(aggregated_series.reset_index()[target], path=path, title=title)
     
     # No aggregation
 
     aggregated_series = df[target]
-    path=f"../..data_transformation/3_{target}_no_aggregation.png"
+    path=f"../..data_transformation/2_{target}_no_aggregation.png"
     title=target+"No aggregation"
     evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
 
@@ -40,19 +39,19 @@ if __name__ == "__main__":
     agg_func = "sum"
 
     aggregated_series = aggregate(df[target], gran_level, agg_func)
-    path="../..data_transformation/3_{target}_hourly_aggregation.png"
+    path=f"../..data_transformation/2_{target}_hourly_aggregation.png"
     title=target+"Monthly aggregation"
     evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
 
     # Aggregated to days
     gran_level = "d"
     aggregated_series = aggregate(df[target], gran_level, agg_func)
-    path="../..data_transformation/3_{target}_dayly_aggregation.png"
+    path=f"../..data_transformation/2_{target}_dayly_aggregation.png"
     title=target+"Dayly aggregation"
     evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
 
     # No aggregation
     aggregated_series = df[target]
-    path="../..data_transformation/3_{target}_no_aggregation.png"
+    path=f"../..data_transformation/2_{target}_no_aggregation.png"
     title=target+"No aggregation"
     evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
