@@ -17,17 +17,17 @@ if __name__ == "__main__":
     gran_level = "M"
     agg_func = "sum"
 
-    aggregated_series = aggregate(df, gran_level, agg_func)
-    path=f"../..data_transformation/2_{target}_monthly_aggregation.png"
+    aggregated_series = aggregate(df[target], gran_level, agg_func)
+    path=f"../../figures/data_transformation/1_{target}_monthly_aggregation"
     title=target+"Monthly aggregation"
-    evaluate.evaluateTransformation(aggregated_series.reset_index()[target], path=path, title=title)
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
     
     # No aggregation
 
     aggregated_series = df[target]
-    path=f"../..data_transformation/2_{target}_no_aggregation.png"
+    path=f"../../figures/data_transformation/1_{target}_no_aggregation"
     title=target+"No aggregation"
-    evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
 
     # Total
     # Aggegated to hours
@@ -39,19 +39,19 @@ if __name__ == "__main__":
     agg_func = "sum"
 
     aggregated_series = aggregate(df[target], gran_level, agg_func)
-    path=f"../..data_transformation/2_{target}_hourly_aggregation.png"
+    path=f"../../figures/data_transformation/1_{target}_hourly_aggregation"
     title=target+"Monthly aggregation"
-    evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
 
     # Aggregated to days
     gran_level = "d"
     aggregated_series = aggregate(df[target], gran_level, agg_func)
-    path=f"../..data_transformation/2_{target}_dayly_aggregation.png"
+    path=f"../../figures/data_transformation/1_{target}_dayly_aggregation"
     title=target+"Dayly aggregation"
-    evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
 
     # No aggregation
     aggregated_series = df[target]
-    path=f"../..data_transformation/2_{target}_no_aggregation.png"
+    path=f"../../figures/data_transformation/1_{target}_no_aggregation"
     title=target+"No aggregation"
-    evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)

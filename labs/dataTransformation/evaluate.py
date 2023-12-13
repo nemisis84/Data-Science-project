@@ -88,7 +88,7 @@ def plot_dual_forecasting_eval(plot1, plot2, path=False):
         plt.show()
 
 
-def evaluateTransformation(data, path=False, title = ""):
+def evaluateTransformation(data, target, path=False, title = ""):
     train, test = series_train_test_split(data, trn_pct=0.90)
     trnX = np.arange(len(train)).reshape(-1, 1)
     trnY = train.to_numpy()
@@ -103,12 +103,15 @@ def evaluateTransformation(data, path=False, title = ""):
     plt.figure()
     plot_forecasting_eval(train, test, prd_trn, prd_tst, title=f"Evaluation {title}")
     if path:
-        plt.savefig(path)
+        plt.savefig(path + ".png")
     else:
         plt.show()
     plt.figure()
-    plot_forecasting_series(train, test, prd_tst, title=f"Forecasting {title}", xlabel=data.index, ylabel=target,
-)
+    plot_forecasting_series(train, test, prd_tst, title=f"Forecasting {title}", xlabel=data.index, ylabel=target)
+    if path:
+        plt.savefig(path + "_forecasting.png")
+    else:
+        plt.show()
 
 
 
