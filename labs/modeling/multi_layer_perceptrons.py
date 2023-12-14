@@ -99,7 +99,6 @@ def find_best_mlp(trnX, trnY, tstX, tstY, target, metric):
 
 
 def do_MLP_yeah(train, test, target, metric):
-    # FIXME: This doesn't work as the length are different, try flipping it.
     trnX, tstX, trnY, tstY, labels, vars = read_train_test_from_files(
         train, test, target
     )
@@ -151,7 +150,7 @@ def do_MLP_yeah(train, test, target, metric):
     savefig(f"../../figures/modeling/MLP/{target}_mlp_{metric}_overfitting.png")
 
 if __name__ == "__main__":
-    target = "CovidPos"
+    target = "Credit_Score"
     train = f"../../datasets/prepared/{target}_train.csv"
     test = f"../../datasets/prepared/{target}_test.csv"
     metric = "accuracy"
