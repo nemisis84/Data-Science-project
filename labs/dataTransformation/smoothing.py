@@ -20,18 +20,20 @@ def smoothing(data, method, param):
 if __name__=="__main__":
     # Deaths
     # Mean 10
-    df = pd.read_csv('../../datasets/forecast_covid.csv')
+    df = pd.read_csv('../../datasets/dataTransformation/1_aggregatedDeaths')
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
     df.sort_index(inplace=True)
+
     target = "deaths"
     method = "mean"
     param = 10
 
     smoothed_series = smoothing(df[target], method, param)
     path=f"../../figures/data_transformation/2_{target}_{method+str(param)}_smoothing"
-    title=target+" Monthly smoothing"
+    title=target+f" {param} {method} smoothing"
     evaluate.evaluateTransformation(smoothed_series, target, path=path, title=title)
+    smoothed_series.to_csv("../../datasets/dataTransformation/2_smoothedDeaths")
     
     # Median 5
     method = "median"
@@ -39,19 +41,19 @@ if __name__=="__main__":
 
     smoothed_series = smoothing(df[target], method, param)
     path=f"../../figures/data_transformation/2_{target}_{method+str(param)}_smoothing"
-    title=target+" Monthly smoothing"
+    title=target+f" {param} {method} smoothing"
     evaluate.evaluateTransformation(smoothed_series, target, path=path, title=title)
     
     # No smoothing
 
     smoothed_series = df[target]
     path=f"../../figures/data_transformation/2_{target}_no_smoothing"
-    title=target+" No smoothing"
+    title=target+f" No smoothing"
     evaluate.evaluateTransformation(smoothed_series, target, path=path, title=title)
 
     # Total
     # Mean 10
-    df = pd.read_csv('../../datasets/forecast_traffic.csv')
+    df = pd.read_csv('../../datasets/dataTransformation/1_aggregatedTotal')
     df['Timestamp'] = pd.to_datetime(df['Timestamp'])
     df.set_index('Timestamp', inplace=True)
     df.sort_index(inplace=True)
@@ -62,9 +64,9 @@ if __name__=="__main__":
 
     smoothed_series = smoothing(df[target], method, param)
     path=f"../../figures/data_transformation/2_{target}_{method+str(param)}_smoothing"
-    title=target+" Monthly smoothing"
+    title=target+f" {param} {method} smoothing"
     evaluate.evaluateTransformation(smoothed_series, target, path=path, title=title)
-
+    smoothed_series.to_csv("../../datasets/dataTransformation/2_smoothedTotal")
     # Exp 0.5
 
     method = "exp"
@@ -72,7 +74,7 @@ if __name__=="__main__":
 
     smoothed_series = smoothing(df[target], method, param)
     path=f"../../figures/data_transformation/2_{target}_{method+str(param)}_smoothing"
-    title=target+" Dayly smoothing"
+    title=target+f" {param} {method} smoothing"
     evaluate.evaluateTransformation(smoothed_series, target, path=path, title=title)
 
     # No smoothing

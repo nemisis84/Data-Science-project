@@ -15,20 +15,29 @@ if __name__ == "__main__":
     df.set_index('date', inplace=True)
     df.sort_index(inplace=True)
     target = "deaths"
+    df[target] = df[target].diff().fillna(0)
+    
     gran_level = "M"
     agg_func = "sum"
-
     aggregated_series = aggregate(df[target], gran_level, agg_func)
     path=f"../../figures/data_transformation/1_{target}_monthly_aggregation"
     title=target+" Monthly aggregation"
     evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
     
+    # Aggregated to quarters
+    gran_level = "Q"
+    agg_func = "sum"
+    aggregated_series = aggregate(df[target], gran_level, agg_func)
+    path=f"../../figures/data_transformation/1_{target}_quarterly_aggregation"
+    title=target+" Quarterly aggregation"
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
     # No aggregation
 
     aggregated_series = df[target]
     path=f"../../figures/data_transformation/1_{target}_no_aggregation"
     title=target+" No aggregation"
     evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
+    aggregated_series.to_csv("../../datasets/dataTransformation/1_aggregatedDeaths")
 
     # Total
     # Aggegated to hours
@@ -42,8 +51,9 @@ if __name__ == "__main__":
 
     aggregated_series = aggregate(df[target], gran_level, agg_func)
     path=f"../../figures/data_transformation/1_{target}_hourly_aggregation"
-    title=target+" Monthly aggregation"
+    title=target+" Hourly aggregation"
     evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
+    aggregated_series.to_csv("../../datasets/dataTransformation/1_aggregatedTotal")
 
     # Aggregated to days
     gran_level = "d"
@@ -51,6 +61,7 @@ if __name__ == "__main__":
     path=f"../../figures/data_transformation/1_{target}_dayly_aggregation"
     title=target+" Dayly aggregation"
     evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
+    
 
     # No aggregation
     aggregated_series = df[target]
