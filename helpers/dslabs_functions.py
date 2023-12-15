@@ -29,6 +29,9 @@ from sklearn.metrics import confusion_matrix, RocCurveDisplay, roc_auc_score
 from sklearn.naive_bayes import _BaseNB, GaussianNB, MultinomialNB, BernoulliNB
 from sklearn.neighbors import KNeighborsClassifier
 
+from helpers.config import ACTIVE_COLORS, LINE_COLOR, FILL_COLOR, cmap_blues
+from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, r2_score
+
 from helpers.config import (
     ACTIVE_COLORS,
     LINE_COLOR,
@@ -51,6 +54,13 @@ alpha = 0.3
 
 NR_STDEV: int = 2
 IQR_FACTOR: float = 1.5
+
+FORECAST_MEASURES = {
+    "MSE": mean_squared_error,
+    "MAE": mean_absolute_error,
+    "R2": r2_score,
+    "MAPE": mean_absolute_percentage_error,
+}
 
 # _reset_epoch_test_example()
 # set_epoch('0000-12-31T00:00:00')  # old epoch (pre MPL 3.3)

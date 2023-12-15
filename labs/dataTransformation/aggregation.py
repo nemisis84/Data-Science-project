@@ -13,46 +13,58 @@ if __name__ == "__main__":
     df = pd.read_csv('../../datasets/forecast_covid.csv')
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
+    df.sort_index(inplace=True)
     target = "deaths"
+    df[target] = df[target].diff().fillna(0)
+    
     gran_level = "M"
     agg_func = "sum"
-
-    aggregated_series = aggregate(df, gran_level, agg_func)
-    print(aggregated_series.reset_index()[target])
-    path="../..data_transformation/3_{target}_monthly_aggregation.png"
-    title=target+"Monthly aggregation"
-    evaluate.evaluateTransformation(aggregated_series.reset_index()[target], path=path, title=title)
+    aggregated_series = aggregate(df[target], gran_level, agg_func)
+    path=f"../../figures/data_transformation/1_{target}_monthly_aggregation"
+    title=target+" Monthly aggregation"
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
     
+    # Aggregated to quarters
+    gran_level = "Q"
+    agg_func = "sum"
+    aggregated_series = aggregate(df[target], gran_level, agg_func)
+    path=f"../../figures/data_transformation/1_{target}_quarterly_aggregation"
+    title=target+" Quarterly aggregation"
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
     # No aggregation
 
     aggregated_series = df[target]
-    path=f"../..data_transformation/3_{target}_no_aggregation.png"
-    title=target+"No aggregation"
-    evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
+    path=f"../../figures/data_transformation/1_{target}_no_aggregation"
+    title=target+" No aggregation"
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
+    aggregated_series.to_csv("../../datasets/dataTransformation/1_aggregatedDeaths")
 
     # Total
     # Aggegated to hours
     df = pd.read_csv('../../datasets/forecast_traffic.csv')
     df['Timestamp'] = pd.to_datetime(df['Timestamp'])
     df.set_index('Timestamp', inplace=True)
+    df.sort_index(inplace=True)
     target = "Total"
     gran_level = "h"
     agg_func = "sum"
 
     aggregated_series = aggregate(df[target], gran_level, agg_func)
-    path="../..data_transformation/3_{target}_hourly_aggregation.png"
-    title=target+"Monthly aggregation"
-    evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
+    path=f"../../figures/data_transformation/1_{target}_hourly_aggregation"
+    title=target+" Hourly aggregation"
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
+    aggregated_series.to_csv("../../datasets/dataTransformation/1_aggregatedTotal")
 
     # Aggregated to days
     gran_level = "d"
     aggregated_series = aggregate(df[target], gran_level, agg_func)
-    path="../..data_transformation/3_{target}_dayly_aggregation.png"
-    title=target+"Dayly aggregation"
-    evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
+    path=f"../../figures/data_transformation/1_{target}_dayly_aggregation"
+    title=target+" Dayly aggregation"
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
+    
 
     # No aggregation
     aggregated_series = df[target]
-    path="../..data_transformation/3_{target}_no_aggregation.png"
-    title=target+"No aggregation"
-    evaluate.evaluateTransformation(aggregated_series, path=path, title=title)
+    path=f"../../figures/data_transformation/1_{target}_no_aggregation"
+    title=target+" No aggregation"
+    evaluate.evaluateTransformation(aggregated_series, target, path=path, title=title)
