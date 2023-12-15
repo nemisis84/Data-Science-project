@@ -12,13 +12,14 @@ if __name__=="__main__":
     df = pd.read_csv('../../datasets/forecast_covid.csv')
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
+    df.sort_index(inplace=True)
     target = "deaths"
     
     interval = 4 # Monthly
 
     differentiated_series = differentiate(df[target], interval)
     path=f"../../figures/data_transformation/3_{target}_{interval}_differentiate"
-    title=target+"Monthly differentiate"
+    title=target+" Monthly differentiate"
     evaluate.evaluateTransformation(differentiated_series, target, path=path, title=title)
     
     # 10
@@ -26,14 +27,14 @@ if __name__=="__main__":
 
     differentiated_series = differentiate(df[target], interval)
     path=f"../../figures/data_transformation/3_{target}_{interval}_differentiate"
-    title=target+"Monthly differentiate"
+    title=target+" Monthly differentiate"
     evaluate.evaluateTransformation(differentiated_series, target, path=path, title=title)
     
     # No differentiate
 
     differentiated_series = df[target]
     path=f"../../figures/data_transformation/3_{target}_no_differentiate"
-    title=target+"No differentiate"
+    title=target+" No differentiate"
     evaluate.evaluateTransformation(differentiated_series, target, path=path, title=title)
 
     # Total
@@ -41,13 +42,14 @@ if __name__=="__main__":
     df = pd.read_csv('../../datasets/forecast_traffic.csv')
     df['Timestamp'] = pd.to_datetime(df['Timestamp'])
     df.set_index('Timestamp', inplace=True)
+    df.sort_index(inplace=True)
     target = "Total"
     
     interval = 4    
 
     differentiated_series = differentiate(df[target], interval)
     path=f"../../figures/data_transformation/3_{target}_{interval}_differentiate"
-    title=target+"Monthly differentiate"
+    title=target+" Monthly differentiate"
     evaluate.evaluateTransformation(differentiated_series, target, path=path, title=title)
 
     # dayly
@@ -56,11 +58,11 @@ if __name__=="__main__":
 
     differentiated_series = differentiate(df[target], interval)
     path=f"../../figures/data_transformation/3_{target}_{interval}_differentiate"
-    title=target+"Dayly differentiate"
+    title=target+" Dayly differentiate"
     evaluate.evaluateTransformation(differentiated_series, target, path=path, title=title)
 
     # No differentiate
     differentiated_series = df[target]
     path=f"../../figures/data_transformation/3_{target}_no_differentiate"
-    title=target+"No differentiate"
+    title=target+" No differentiate"
     evaluate.evaluateTransformation(differentiated_series, target, path=path, title=title)

@@ -120,6 +120,7 @@ if __name__ == "__main__":
     df.drop(columns=["week"], inplace=True)
     df['date'] = pd.to_datetime(df['date'])
     df.set_index('date', inplace=True)
+    df.sort_index(inplace=True)
     target = "deaths"
 
     data = df[target]
