@@ -831,8 +831,9 @@ def plot_components(
     title: str = "",
     x_label: str = "time",
     y_label: str = "",
+    frequency: int=96, 
 ) -> list[Axes]:
-    decomposition: DecomposeResult = seasonal_decompose(series, model="add")
+    decomposition: DecomposeResult = seasonal_decompose(series, model="add", period = frequency)
     components: dict = {
         "observed": series,
         "trend": decomposition.trend,
@@ -842,8 +843,9 @@ def plot_components(
     rows: int = len(components)
     fig: Figure
     axs: list[Axes]
-    fig, axs = subplots(rows, 1, figsize=(3 * HEIGHT, rows * HEIGHT))
+    fig, axs = subplots(rows, 1, figsize=(2 * HEIGHT, 5 * HEIGHT))
     fig.suptitle(f"{title}")
+    fig.subplots_adjust(top=0.9, hspace = 0.5)
     i: int = 0
     for key in components:
         set_chart_labels(axs[i], title=key, xlabel=x_label, ylabel=y_label)
